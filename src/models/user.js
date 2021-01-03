@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const Task = require('./task')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -36,9 +35,6 @@ const userSchema = new mongoose.Schema({
     books: [{
         type: String
     }],
-    isAdmin: {
-        type: Boolean
-    },
     tokens: [{
         token: {
             type: String,

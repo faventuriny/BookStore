@@ -4,7 +4,7 @@ const bookSchema = new mongoose.Schema({
     bookName: {
         type: String,
         required: true, 
-        trim: true // admin can edit 
+        trim: true 
     },
     bookAuthor: {
         type: String,
