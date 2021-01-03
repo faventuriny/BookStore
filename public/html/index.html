@@ -3,28 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style-index.css" rel="stylesheet">
     <title>Book Store</title>
 </head>
 <body>
     <section>
-        <div>
-            <h1 class="first-section">Book Store</h1>
+        <div class="first-section">
+            <h1>Book Store</h1>
         </div>
         <div class="secound-section">
-            <div class="search"></div>
-            <div class="shopping-card"></div>
+            <div class="secound-section-inner">
+                <div class="search">
+                    <form action="http://localhost:3000/shopping-cart.html">
+                        <input id="search-text" type="text" placeholder="search">
+                        <button id="search">🔍</button>
+                    </form>
+                </div>
+                <div class="shopping-cart">
+                    <a href="">Login</a>
+                    <img src="../pic/cart_pic.png" alt="card pic">
+                </div>
+            </div>
         </div>
     </section>
     <section>
         <div class="books">
-            <div class="book-details"></div>
-            <div class="book-details"></div>
-            <div class="book-details"></div>
-            <div class="book-details"></div>
-            <div class="book-details"></div>
-            <div class="book-details"></div>
+            <div class="books-inner">
+                <div class="book-details">
+                    <img class="book-img" src="../pic/Arising.webp" alt="Arising">
+                    <h1 class="book-name">The Dead Are Arising: The Life of Malcolm X</h1>
+                    <div class="book-price-cart">
+                        <p class="book-price">32.2$</p>
+                        <a href="">
+                            <img src="../pic/cart_pic.png" alt="cart">
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+
     
 </body>
 </html>

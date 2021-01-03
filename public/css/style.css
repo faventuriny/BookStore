@@ -1,0 +1,73 @@
+html{
+    margin: 0;
+    padding: 0;
+}
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.first-section{
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1d3557;
+    color: white;
+    font-size: 3em;
+}
+.secound-section{
+    height: 7vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #a8dadc;
+    color: #333333;
+    font-size: 1em;
+}
+.secound-section-inner{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 960px;
+}
+
+.secound-section form{
+    height: 6vh;
+    border: none;
+    display: flex;
+    align-items: center;
+}
+.secound-section form input,
+.secound-section form input:active,
+.secound-section form input:focus{
+    background-color: #a8dadc;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #1d3557;
+    height: 3vh;
+    font-size: 1.2em;
+    padding-left: 15px;
+}
+
+.secound-section form button {
+    background-color: #a8dadc;
+    border: none;
+}
+.shopping-cart{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 120px;
+}
+.secound-section img {
+    height: 5vh;
+}
+.secound-section a{
+    text-decoration: none;
+    color: #1d3557;
+    font-weight: 600;
+}
+.secound-section a:hover{
+    text-decoration: underline;
+}
