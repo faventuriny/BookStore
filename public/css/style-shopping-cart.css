@@ -1,0 +1,77 @@
+.section-2{
+    display: flex;
+    justify-content: center;
+}
+.section-2-inner{
+    width: 600px;
+    padding-top: 60px;
+}
+.section-2-inner h1.shopping-cart-title {
+    color: #296466;
+    font-size: 2.3em;
+    padding-bottom: 20px;
+    margin: 0;
+    border-bottom: 1px solid gray;
+}
+.item{
+    border-bottom: 1px solid gray;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+
+}
+.item .book-img{
+    width: 150px;
+    height: 225px;
+}
+.item .book-name{
+    color: #333333;
+    font-size: 1.3em;
+    margin: 0 20px;
+}
+.item .book-price p{
+    color: #333333;
+    font-size: 1.1em;
+    margin: 0 20px;
+}
+.item img{
+    width: 40px;
+    height: 40px;
+}
+.checkout{
+    width: 600px;
+    padding-left: 370px;
+}
+.checkout-inner{
+    width: 150px;
+    display: flex;
+    align-items: center;
+}
+.checkout-inner div{
+    display: flex;
+    align-items: center;
+}
+.checkout-inner h1{
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-right: 10px;
+    color: #333333;
+}
+.checkout-inner p{
+    margin-right: 10px;
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #333333;
+}
+.checkout-inner button{
+    width: 110px;
+    height: 40px;
+    /* background-color: #1d3557; */
+    background-color: #296466;
+    color: white;
+    font-size: 1.2em;
+    pad: 10px;
+    border-radius: 5px ;
+    border: 1px solid #296466;
+    box-shadow: 2px 2px 8px #888888;
+}
