@@ -3,6 +3,24 @@
     justify-content: center;
     margin-top: 60px;
 }
+.section-2-inner{
+    border: 5px solid #a8dadc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px #888888;
+}
+.section-2-inner .sign-in{
+    background-color: #a8dadc;
+    padding: 20px;
+}
+.section-2-inner .form{
+    padding: 0 30px 30px 30px;
+    border-radius: 5px;
+}
+.section-2 .section-2-inner h1{
+    color: #296466;
+    text-align: left;
+    margin: 0;
+}
 .section-2 form {
     width: 300px;
     margin-top: 25px;
@@ -10,6 +28,7 @@
     flex-direction: column;
     align-items: center;
 }
+
 .section-2 input,
 .section-2 input:active,
 .section-2 input:focus{
@@ -22,9 +41,36 @@
     font-size: 2.1em;
     padding-left: 20px;
 }
+.section-2 .login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
 .section-2 button{
     width: 100px;
     height: 40px;
-    margin-top: 20px;
+    font-size: 1em;
+    background-color: #1d3557;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px #888888;
+    margin-right: 20px;
+}
+#create-account-button{
+    width: 180px;
+}
+#create-account{
+    width: 65px;
+}
+.section-2 a{
+    text-decoration: none;
+    color: #296466;
+    font-size: 0.7em;
+    text-align: center;
+    font-weight: 600;
+}
+.section-2 a:hover{
+    text-decoration: underline;
 }
 
