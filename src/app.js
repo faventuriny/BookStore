@@ -1,12 +1,17 @@
-// const express = require('express')
-// require('./db/mongoose')
-// const userRouter = require('./routers/user')
-// const taskRouter = require('./routers/task')
+const express = require('express') 
+require('./db/mongoose')
+const userRouter = require('./routes/user')
+//const bookRouter = require('./routes/book')
+const path = require('path')
 
-// const app = express()
+const publicDirectoryPath = path.join(__dirname, '../public')
 
-// app.use(express.json())
-// app.use(userRouter)
-// app.use(taskRouter)
+const app = express()
 
-// module.exports = app
+app.use(express.static(publicDirectoryPath))
+app.use(express.json())
+app.use(userRouter)
+//app.use(bookRouter)
+
+
+module.exports = app

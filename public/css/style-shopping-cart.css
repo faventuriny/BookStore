@@ -39,6 +39,10 @@
     height: 40px;
 }
 .checkout{
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    background-color: white;
     width: 600px;
     padding-left: 370px;
 }

@@ -24,6 +24,6 @@ const bookSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const Task = mongoose.model('Task', taskSchema)
+const Book = mongoose.model('Book', bookSchema)
 
-module.exports = Task
+module.exports = Book
