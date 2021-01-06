@@ -23,6 +23,18 @@ router.get('/books', async (req, res) => {
     })
 })
 
+router.get('/books/:name', async (req, res) => {
+    try{
+        const book = await Book.findOne({bookName: req.params.name })
+        if(!book){
+            res.status(400).send()
+        }
+        res.send(book)
+    } catch (e) {
+        res.status(404).send()
+    }
+})
+
 router.patch('/books/:id', async (req, res) => {
     
     const updates = Object.keys(req.body)
