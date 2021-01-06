@@ -14,15 +14,11 @@ const bookSchema = new mongoose.Schema({
     bookPrice: {
         type: Number,
         required: true
-    },
-    bookDescription: {
-        type: String,
-        required: true, 
-        trim: true
     }
 }, {
     timestamps: true
 })
+
 
 const Book = mongoose.model('Book', bookSchema)
 
