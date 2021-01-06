@@ -23,6 +23,10 @@
 }
 .book-details .book-name{
     font-size: 1em;
+    height: 38px;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 0.4em;
 }
 .book-price-cart{
     display: flex;

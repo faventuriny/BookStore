@@ -14,6 +14,10 @@ const bookSchema = new mongoose.Schema({
     bookPrice: {
         type: Number,
         required: true
+    },
+    img: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true

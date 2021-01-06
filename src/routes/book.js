@@ -26,7 +26,7 @@ router.get('/books', async (req, res) => {
 router.patch('/books/:id', async (req, res) => {
     
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['bookName', 'bookAuthor', 'bookPrice', 'bookDescription']
+    const allowedUpdates = ['bookName', 'bookAuthor', 'bookPrice', 'bookDescription', 'img']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
