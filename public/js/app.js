@@ -64,41 +64,34 @@ window.onload = (e)=>{
     })
 }
 
-
-
-
 // search and show a book 
-const searchForm = document.querySelector('#search-form')
+// const searchForm = document.querySelector('#search-form')
 
-searchForm.addEventListener('submit', (e)=>{
-    e.preventDefault()
-    const searchText = document.querySelector('#search-text').value
-    if(isAMatch(searchText, books)){ //<<< איך אני מושכת לפה את הספרים
+// searchForm.addEventListener('submit', (e)=>{
+//     e.preventDefault()
+//     const searchText = document.querySelector('#search-text').value
+//     if(isAMatch(searchText, books)){ //<<< איך אני מושכת לפה את הספרים
 
-    }
-    console.log(searchText);
-    
-})
+//     }
+//     console.log(searchText);
+// })
 
-let booksFound = []
+
 const isAMatch = (searchBook, books) => {
     searchBook = searchBook.trim().toLowerCase() 
-    
-    let isAMatch = false
-    booksFound = []
+    let booksFound = []
 
     books.forEach(book => {
-        lowerCaseBook = book.toLowerCase()
+        lowerCaseBook = book.bookName.toLowerCase()
         if(lowerCaseBook.indexOf(searchBook)>=0){
             booksFound.push(book)
-            isAMatch = true
         }
     });
 
-    return isAMatch; 
+    return booksFound; 
 }
 
-
+module.exports = isAMatch
 
 
 
