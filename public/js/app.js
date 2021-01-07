@@ -1,6 +1,5 @@
 // Show All Books at home page
 
-
 let allBooksURL = "http://localhost:3000/books" 
 let bookContainer = document.querySelector(".books-inner")
 
@@ -46,21 +45,25 @@ const setUpHomePage = (jsonObj) => {
         a.appendChild(img)
     })
 }
-window.onload = (e)=>{
-    fetch(allBooksURL, {
-        method: 'GET'
-    })
-    .then((res)=>{
-        if(res.ok){
-            return res.json()
-        } else {
-            throw new Error(res.status)
-        }
-    })
-    .then((jsonObj) => setUpHomePage(jsonObj))
-    .catch((err)=>{
-        console.log(err); 
-    })
+try {
+    window.onload = (e)=>{
+        fetch(allBooksURL, {
+            method: 'GET'
+        })
+        .then((res)=>{
+            if(res.ok){
+                return res.json()
+            } else {
+                throw new Error(res.status)
+            }
+        })
+        .then((jsonObj) => setUpHomePage(jsonObj))
+        .catch((err)=>{
+            console.log(err); 
+        })
+    }
+} catch (error) {
+    
 }
 
 // search and show a book 
@@ -105,6 +108,58 @@ searchForm.addEventListener('submit', (e)=>{
         
     })
 })
+
+//Create new user
+
+const creatNewUserForm= document.querySelector('#creat-new-user-form')
+
+creatNewUserForm.addEventListener('submit', (e)=>{
+    e.preventDefault()
+    
+    try {
+        var data = JSON.stringify({
+            "name": document.querySelector('#name').value,
+            "email": document.querySelector('#mail').value,
+            "password": document.querySelector('#password').value
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+        }
+        });
+
+        xhr.open("POST", "http://localhost:3000/users");
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.send(data);
+
+        window.location.href = "http://localhost:3000"
+
+        
+        
+    } catch (error) {
+        alert(error)
+    }
+
+
+    // xhr.send(JSON.stringify({
+    //     name: 'Sandy',                  
+    //     mail: 'sandy@example.com',      
+    //     password: 'Sandy123!'                      
+    // }));
+    //document.querySelector('#name').value,
+    //document.querySelector('#mail').value,
+    //document.querySelector('#password').value
+    
+    
+})
+
+//Login
+
 
 
 

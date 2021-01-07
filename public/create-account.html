@@ -17,7 +17,7 @@
         <div class="secound-section">
             <div class="secound-section-inner">
                 <div class="search">
-                    <form action="">
+                    <form action="" id="search-form">
                         <input id="search-text" type="text" placeholder="search">
                         <button id="search">🔍</button>
                     </form>
@@ -38,11 +38,12 @@
                     <h1>Create a New Account</h1>
                 </div>
                 <div class="form">
-                    <form action="">
-                        <input type="text" placeholder="mail">
-                        <input type="text" placeholder="password">
+                    <form action="" id="creat-new-user-form">
+                        <input type="text" placeholder="Name" id="name">
+                        <input type="text" placeholder="mail" id="mail">
+                        <input type="text" placeholder="password" id="password">
                         <div class="login">
-                            <button id="create-account-button">CREATE ACCOUNT</button>
+                            <button id="create-account-button" type="submit">CREATE ACCOUNT</button>
                             <div id="create-account">
                                 <a href="http://localhost:3000/login.html">Login</a>
                             </div>
