@@ -46,8 +46,6 @@ const setUpHomePage = (jsonObj) => {
         a.appendChild(img)
     })
 }
-
-
 window.onload = (e)=>{
     fetch(allBooksURL, {
         method: 'GET'
@@ -95,8 +93,16 @@ searchForm.addEventListener('submit', (e)=>{
             }
         })
         bookContainer.innerHTML = ''; //cleanHomePage
-        setUpHomePage(booksFounded)
-    
+        if(booksFounded.length === 0){
+            let p = document.createElement('p')
+            let node = document.createTextNode("Sorry! We cann't found the book you're looking for");
+            p.appendChild(node)
+            p.classList.add("not-found")
+            bookContainer.appendChild(p)
+        } else {
+            setUpHomePage(booksFounded)
+        }
+        
     })
 })
 

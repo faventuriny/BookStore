@@ -75,3 +75,8 @@ body{
 .secound-section a:hover{
     text-decoration: underline;
 }
+.not-found{
+    color: #1d3557;
+    font-size: 1.5em;
+    font-weight: 500;
+}
