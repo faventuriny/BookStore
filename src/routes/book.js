@@ -24,28 +24,28 @@ router.get('/books', async (req, res) => {
 })
 
 
-router.get('/books/:name', async (req, res) => {
-    const book = req.params.name
-    const books = await Book.find({})
-    const booksfounded = []
+// router.get('/books/:name', async (req, res) => {
+//     const book = req.params.name
+//     const books = await Book.find({})
+//     const booksfounded = []
     
-    try{
-        book = book.trim().toLowerCase()
-        books.forEach(b => {
-            let lowerCaseBook = b.bookName.toLowerCase()
-            if(lowerCaseBook.indexOf(book)>=0){
-                booksFounded.push(b)
-            }
-        })
+//     try{
+//         book = book.trim().toLowerCase()
+//         books.forEach(b => {
+//             let lowerCaseBook = b.bookName.toLowerCase()
+//             if(lowerCaseBook.indexOf(book)>=0){
+//                 booksFounded.push(b)
+//             }
+//         })
 
-        // if(booksfounded == []){
-        //     res.status(400).send()
-        // }
-        res.send(booksfounded)
-    } catch (e) {
-        res.status(404).send({book, books, booksfounded})
-    }
-})
+//         // if(booksfounded == []){
+//         //     res.status(400).send()
+//         // }
+//         res.send(booksfounded)
+//     } catch (e) {
+//         res.status(404).send({book, books, booksfounded})
+//     }
+// })
 
 // router.get('/books/:name', async (req, res) => {
 //     const book = await Book.find({bookName: req.params.name })
