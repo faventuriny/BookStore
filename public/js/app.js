@@ -1,9 +1,10 @@
 // Show All Books at home page
 
 let allBooksURL = "http://localhost:3000/books" 
-let bookContainer = document.querySelector(".books-inner")
+
 
 const setUpHomePage = (jsonObj) => {
+    let bookContainer = document.querySelector(".books-inner")
     console.log(jsonObj);
     jsonObj.forEach((book)=>{
         let bookDetails = document.createElement('div') 
@@ -45,7 +46,8 @@ const setUpHomePage = (jsonObj) => {
         a.appendChild(img)
     })
 }
-try {
+
+if(document.querySelector('.indexClass') !== null){
     window.onload = (e)=>{
         fetch(allBooksURL, {
             method: 'GET'
@@ -62,9 +64,8 @@ try {
             console.log(err); 
         })
     }
-} catch (error) {
-    
 }
+
 
 // search and show a book 
 const searchForm = document.querySelector('#search-form')
@@ -95,13 +96,27 @@ searchForm.addEventListener('submit', (e)=>{
                 booksFounded.push(book)
             }
         })
-        bookContainer.innerHTML = ''; //cleanHomePage
+        //window.location.href = "http://localhost:3000/search.html"
+        const section2 = document.querySelector('#section2')
+        section2.innerHTML = '';
+
+        const booksDiv = document.createElement('div')
+        booksDiv.classList.add('books')
+        section2.appendChild(booksDiv)
+
+        const booksInnerDiv = document.createElement('div')
+        booksInnerDiv.classList.add('books-inner')
+        booksDiv.appendChild(booksInnerDiv)
+        
+        //bookContainer.innerHTML = ''; //cleanHomePage
+
         if(booksFounded.length === 0){
             let p = document.createElement('p')
             let node = document.createTextNode("Sorry! We cann't found the book you're looking for");
             p.appendChild(node)
             p.classList.add("not-found")
-            bookContainer.appendChild(p)
+            booksInnerDiv.appendChild(p)
+
         } else {
             setUpHomePage(booksFounded)
         }
@@ -109,56 +124,78 @@ searchForm.addEventListener('submit', (e)=>{
     })
 })
 
-//Create new user
+// Create new user
+if(document.querySelector('.newUserClass') !== null){
+    const creatNewUserForm= document.querySelector('#creat-new-user-form')
 
-const creatNewUserForm= document.querySelector('#creat-new-user-form')
-
-creatNewUserForm.addEventListener('submit', (e)=>{
-    e.preventDefault()
+    creatNewUserForm.addEventListener('submit', (e)=>{
+        e.preventDefault()
+        
+        try {
+            var data = JSON.stringify({
+                "name": document.querySelector('#name').value,
+                "email": document.querySelector('#mail').value,
+                "password": document.querySelector('#password').value
+            });
     
-    try {
-        var data = JSON.stringify({
-            "name": document.querySelector('#name').value,
-            "email": document.querySelector('#mail').value,
-            "password": document.querySelector('#password').value
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-
-        xhr.addEventListener("readystatechange", function() {
-        if(this.readyState === 4) {
-            console.log(this.responseText);
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+    
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+            }
+            });
+    
+            xhr.open("POST", "http://localhost:3000/users");
+            xhr.setRequestHeader("Content-Type", "application/json");
+    
+            xhr.send(data);
+    
+            window.location.href = "http://localhost:3000"
+    
+            
+            
+        } catch (error) {
+            alert("Something went wrong. The email or password is incorrect")
         }
-        });
-
-        xhr.open("POST", "http://localhost:3000/users");
-        xhr.setRequestHeader("Content-Type", "application/json");
-
-        xhr.send(data);
-
-        window.location.href = "http://localhost:3000"
-
-        
-        
-    } catch (error) {
-        alert(error)
-    }
-
-
-    // xhr.send(JSON.stringify({
-    //     name: 'Sandy',                  
-    //     mail: 'sandy@example.com',      
-    //     password: 'Sandy123!'                      
-    // }));
-    //document.querySelector('#name').value,
-    //document.querySelector('#mail').value,
-    //document.querySelector('#password').value
-    
-    
-})
+    })
+}
 
 //Login
+if(document.querySelector('.loginClass') !== null){
+    const loginForm = document.querySelector("#login-form")
+    loginForm.addEventListener('submit', (e)=>{
+        e.preventDefault()
+
+        try {
+            var data = JSON.stringify({
+                "name": document.querySelector('#name').value,
+                "email": document.querySelector('#mail').value,
+                "password": document.querySelector('#password').value
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+            }
+            });
+
+            xhr.open("POST", "http://localhost:3000/users/login");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.send(data);
+
+            window.location.href = "http://localhost:3000"
+
+        } catch (error) {
+            alert("Something went wrong. The email or password is incorrect")
+        }
+    })
+}
 
 
 
