@@ -23,45 +23,18 @@ router.get('/books', async (req, res) => {
     })
 })
 
-
-// router.get('/books/:name', async (req, res) => {
-//     const book = req.params.name
-//     const books = await Book.find({})
-//     const booksfounded = []
+router.get('/books/:id', async (req, res) => {
+    const book = await Book.findOne({_id: req.params.id })
     
-//     try{
-//         book = book.trim().toLowerCase()
-//         books.forEach(b => {
-//             let lowerCaseBook = b.bookName.toLowerCase()
-//             if(lowerCaseBook.indexOf(book)>=0){
-//                 booksFounded.push(b)
-//             }
-//         })
-
-//         // if(booksfounded == []){
-//         //     res.status(400).send()
-//         // }
-//         res.send(booksfounded)
-//     } catch (e) {
-//         res.status(404).send({book, books, booksfounded})
-//     }
-// })
-
-// router.get('/books/:name', async (req, res) => {
-//     const book = await Book.find({bookName: req.params.name })
-//     const books = await Book.find({})
-//     const booksfounded = isAMatch(book, books)
-    
-//     try{
-        
-//         if(!book){
-//             res.status(400).send()
-//         }
-//         res.send(book)
-//     } catch (e) {
-//         res.status(404).send()
-//     }
-// })
+    try{
+        if(!book){
+            res.status(400).send()
+        }
+        res.send(book)
+    } catch (e) {
+        res.status(404).send()
+    }
+})
 
 router.patch('/books/:id', async (req, res) => {
     

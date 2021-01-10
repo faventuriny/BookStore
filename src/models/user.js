@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { ObjectID } = require('mongodb')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -33,7 +34,7 @@ const userSchema = new mongoose.Schema({
         }
     },
     books: [{
-        type: String
+        type: mongoose.Types.ObjectId
     }],
     tokens: [{
         token: {

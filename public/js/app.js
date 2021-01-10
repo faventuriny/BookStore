@@ -3,9 +3,26 @@
 let allBooksURL = "http://localhost:3000/books" 
 
 
-const setUpHomePage = (jsonObj) => {
+const changeLoginToUserName = ()=>{
+    console.log("user name:",sessionStorage.getItem('userName'));
+    console.log("token",sessionStorage.getItem('token'));
+    
+    if(sessionStorage.getItem('userName') !== null){ 
+        try {
+            let loginA = document.querySelector('#loginA')
+            loginA.innerHTML = sessionStorage.getItem('userName') + ' is connected'
+            loginA.href = 'http://localhost:3000'
+        } catch (error) {
+            
+        }
+    }
+}
+
+const setUpHomePage = (jsonObj) => {  
+    changeLoginToUserName()
     let bookContainer = document.querySelector(".books-inner")
-    console.log(jsonObj);
+    console.log('All books obj:', jsonObj); //<< 
+    
     jsonObj.forEach((book)=>{
         let bookDetails = document.createElement('div') 
         bookDetails.classList.add("book-details")
@@ -46,6 +63,9 @@ const setUpHomePage = (jsonObj) => {
         a.appendChild(img)
     })
 }
+window.onload = (e) => {
+    changeLoginToUserName()
+}
 
 if(document.querySelector('.indexClass') !== null){
     window.onload = (e)=>{
@@ -65,7 +85,6 @@ if(document.querySelector('.indexClass') !== null){
         })
     }
 }
-
 
 // search and show a book 
 const searchForm = document.querySelector('#search-form')
@@ -96,7 +115,7 @@ searchForm.addEventListener('submit', (e)=>{
                 booksFounded.push(book)
             }
         })
-        //window.location.href = "http://localhost:3000/search.html"
+
         const section2 = document.querySelector('#section2')
         section2.innerHTML = '';
 
@@ -107,8 +126,6 @@ searchForm.addEventListener('submit', (e)=>{
         const booksInnerDiv = document.createElement('div')
         booksInnerDiv.classList.add('books-inner')
         booksDiv.appendChild(booksInnerDiv)
-        
-        //bookContainer.innerHTML = ''; //cleanHomePage
 
         if(booksFounded.length === 0){
             let p = document.createElement('p')
@@ -144,6 +161,13 @@ if(document.querySelector('.newUserClass') !== null){
             xhr.addEventListener("readystatechange", function() {
             if(this.readyState === 4) {
                 console.log(this.responseText);
+                
+                let JSONRes = JSON.parse(this.responseText) 
+                let userName =  JSONRes.user.name
+                let token = JSONRes.token
+
+                sessionStorage.setItem('userName', userName)
+                sessionStorage.setItem('token', token)
             }
             });
     
@@ -151,51 +175,67 @@ if(document.querySelector('.newUserClass') !== null){
             xhr.setRequestHeader("Content-Type", "application/json");
     
             xhr.send(data);
-    
-            window.location.href = "http://localhost:3000"
-    
-            
+
+
+            setTimeout(() => {
+                window.location.href = "http://localhost:3000"
+            }, 1500);
             
         } catch (error) {
-            alert("Something went wrong. The email or password is incorrect")
+            alert("Something went wrong. Please try again")
         }
     })
 }
 
 //Login
 if(document.querySelector('.loginClass') !== null){
+    
     const loginForm = document.querySelector("#login-form")
     loginForm.addEventListener('submit', (e)=>{
+        
         e.preventDefault()
 
         try {
-            var data = JSON.stringify({
-                "name": document.querySelector('#name').value,
+            let data = JSON.stringify({
                 "email": document.querySelector('#mail').value,
                 "password": document.querySelector('#password').value
             });
-
-            var xhr = new XMLHttpRequest();
+            
+            let xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
 
             xhr.addEventListener("readystatechange", function() {
-            if(this.readyState === 4) {
-                console.log(this.responseText);
-            }
+                if(this.readyState === 4) {
+                    console.log(this.responseText);
+            
+                    let JSONRes = JSON.parse(this.responseText) 
+                    let userName =  JSONRes.user.name
+                    let token = JSONRes.token
+
+                    sessionStorage.setItem('userName', userName)
+                    sessionStorage.setItem('token', token)
+
+                    console.log("sessionStorage.getItem('userName')",sessionStorage.getItem('userName'));
+                    console.log("sessionStorage.getItem('token')", sessionStorage.getItem('token'));
+
+                }
             });
 
             xhr.open("POST", "http://localhost:3000/users/login");
+            
             xhr.setRequestHeader("Content-Type", "application/json");
 
             xhr.send(data);
-
-            window.location.href = "http://localhost:3000"
-
+            setTimeout(() => {
+                window.location.href = "http://localhost:3000"
+            }, 1500);
         } catch (error) {
             alert("Something went wrong. The email or password is incorrect")
         }
     })
 }
+
+//
 
 
 

@@ -41,4 +41,14 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 })
 
+//add books to user
+router.post('users/add-book/:id', auth, async (req, res) => {
+    const bookID = req.params.id
+    try {
+        // add to user the book :  req.user.
+    } catch (req) {
+        
+    }
+})
+
 module.exports = router
