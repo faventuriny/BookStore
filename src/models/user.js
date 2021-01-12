@@ -2,7 +2,9 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { ObjectID } = require('mongodb')
+const Book = require('./book')
+const { schema } = require('./book')
+const Schema = mongoose.Schema
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -32,9 +34,9 @@ const userSchema = new mongoose.Schema({
                 throw new Error('Password cannot contain "password"')
             }
         }
-    },
-    books: [{
-        type: mongoose.Types.ObjectId
+    },books: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Book'
     }],
     tokens: [{
         token: {
@@ -92,6 +94,7 @@ userSchema.pre('save', async function (next) {
 
     next()
 })
+
 
 const User = mongoose.model('User', userSchema)
 

@@ -1,0 +1,37 @@
+.section2 {
+    display: flex;
+    justify-content: center;
+}
+.section2-inner{
+    margin-top: 50px;
+    width: 960px;
+    display: flex;
+}
+.book-pic img {
+    width: 300px;
+    height: 450px;
+    margin-right: 50px;
+}
+
+.book-details {
+    width: 660px;
+    display: flex;
+    justify-content: left;
+}
+.book-details .book-name,
+.book-author{
+    margin: 0;
+    display: block;
+    text-align: left;
+    width: 100%;
+    font-size: 2.7em;
+    height: auto;
+    margin-bottom: 30px;
+}
+.book-author{
+    font-size: 1.5em;
+}
+.book-price-cart{
+    width: 100%;
+    justify-content: left;
+}

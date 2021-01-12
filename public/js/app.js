@@ -1,7 +1,7 @@
 // Show All Books at home page
 
 let allBooksURL = "http://localhost:3000/books" 
-
+let hiddenObj
 
 const changeLoginToUserName = ()=>{
     console.log("user name:",sessionStorage.getItem('userName'));
@@ -31,6 +31,7 @@ const setUpHomePage = (jsonObj) => {
         let bookImg = document.createElement('img')
         bookImg.src = book.img
         bookImg.classList.add("book-img")
+        bookImg.setAttribute('_id',book._id)
         bookDetails.appendChild(bookImg)
 
         let bookHeader = document.createElement('h1')
@@ -55,12 +56,17 @@ const setUpHomePage = (jsonObj) => {
         dolar.classList.add("book-price")
         bookPriceCart.appendChild(dolar)
 
-        let a = document.createElement('a')
-        bookPriceCart.appendChild(a)
+        // let a = document.createElement('a')
+        // a.href = ""
+        // a.classList.add('cartIcon')
+        // a.setAttribute('_id',book._id)
+        // bookPriceCart.appendChild(a)
 
         let img = document.createElement('img') 
         img.src = "./pic/cart_pic.png"
-        a.appendChild(img)
+        img.classList.add('cartIcon')
+        img.setAttribute('_id',book._id)
+        bookPriceCart.appendChild(img)
     })
 }
 window.onload = (e) => {
@@ -79,7 +85,11 @@ if(document.querySelector('.indexClass') !== null){
                 throw new Error(res.status)
             }
         })
-        .then((jsonObj) => setUpHomePage(jsonObj))
+        .then(async (jsonObj) => {
+            await setUpHomePage(jsonObj)
+            addEventclickOnCart()
+            addEventClickOnPic()
+        })
         .catch((err)=>{
             console.log(err); 
         })
@@ -149,25 +159,29 @@ if(document.querySelector('.newUserClass') !== null){
         e.preventDefault()
         
         try {
-            var data = JSON.stringify({
+            let data = JSON.stringify({
                 "name": document.querySelector('#name').value,
                 "email": document.querySelector('#mail').value,
                 "password": document.querySelector('#password').value
             });
     
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
     
             xhr.addEventListener("readystatechange", function() {
             if(this.readyState === 4) {
-                console.log(this.responseText);
-                
-                let JSONRes = JSON.parse(this.responseText) 
-                let userName =  JSONRes.user.name
-                let token = JSONRes.token
+                console.log('responseText:',this.responseText);
+                try{
+                    let JSONRes = JSON.parse(this.responseText) 
 
-                sessionStorage.setItem('userName', userName)
-                sessionStorage.setItem('token', token)
+                    let userName =  JSONRes.user.name
+                    let token = JSONRes.token
+
+                    sessionStorage.setItem('userName', userName)
+                    sessionStorage.setItem('token', token)
+                } catch(e){
+                    alert(a)
+                }
             }
             });
     
@@ -235,7 +249,98 @@ if(document.querySelector('.loginClass') !== null){
     })
 }
 
-//
+//push book to cart
+const addEventclickOnCart = () => {
+    document.querySelectorAll('.cartIcon').forEach(cartIcon=>{
+        cartIcon.addEventListener('click',(e)=>{
+            e.preventDefault()
+                            // let data = JSON.stringify({
+                            //     "_id": "5ff806e82ecf3701d6c99ad9",
+                            //     "name": "Penny",
+                            //     "email": "penny@exp.com",
+                            // });
+            try {
+                let xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+
+                xhr.addEventListener("readystatechange", function() {
+                if(this.readyState === 4) {
+                    console.log(this.responseText);
+                }
+                });
+                
+                const bookID = cartIcon.getAttribute('_id')
+                let url = 'http://localhost:3000/users/add-book/' + bookID
+
+                xhr.open("PATCH", url);
+                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('token'));
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                //xhr.send(data);
+                xhr.send();
+            } catch (error) {
+                console.log(error); 
+            }
+        })
+    })
+}
+
+const addEventClickOnPic = ()=>{
+    document.querySelectorAll('.book-img').forEach(pic=>{
+        pic.addEventListener('click', (e)=>{
+            e.preventDefault()
+            const bookID = pic.getAttribute('_id')
+            sessionStorage.setItem('bookID', bookID)
+            window.location.href = "http://localhost:3000/single-book.html"
+        })
+    })
+}
+
+if(document.querySelector('.singleBookClass') !== null){
+    window.onload = (e)=>{
+        let url = 'http://localhost:3000/books/' + sessionStorage.getItem('bookID')
+        fetch(url, {
+            method: 'GET'
+        })
+        .then((res)=>{
+            if(res.ok){
+                return res.json()
+            } else {
+                throw new Error(res.status)
+            }
+        })
+        .then(async (jsonObj) => {
+            console.log('Book ID:',sessionStorage.getItem('bookID'));
+            
+            await setUpSingleBookPage(jsonObj)
+            addEventclickOnCart()
+        })
+        .catch((err)=>{
+            console.log(err); 
+        })
+    }
+}
+
+const setUpSingleBookPage = ()=>{
+    changeLoginToUserName()
+    
+    let bookContainer = document.querySelector(".section2-inner")
+    console.log('All books obj:', jsonObj); //<< 
+    document.querySelector('.book-img').src = jsonObj.img
+    document.querySelector('.book-name').innerHTML = jsonObj.bookName
+    document.querySelector('.book-author').innerHTML = jsonObj.bookAuthor
+    document.querySelector('.book-price').innerHTML = jsonObj.bookPrice
+    
+}
+
+
+
+ 
+
+
+
+
+
 
 
 

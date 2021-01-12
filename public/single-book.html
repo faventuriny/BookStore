@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./css/style.css" rel="stylesheet">
-    <link href="./css/style-login.css" rel="stylesheet">
-    <title>Create Account</title>
+    <link href="./css/style-single-book.css" rel="stylesheet">
+    <title>Book Store</title>
 </head>
-<body class="newUserClass">
+<body class="singleBookClass">
     <section>
         <div class="first-section">
             <a href="./index.html">
@@ -32,27 +32,25 @@
         </div>
     </section>
     <section id="section2">
-        <div class="section-2">
-            <div class="section-2-inner">
-                <div class="sign-in">
-                    <h1>Create a New Account</h1>
+        <div class="section2">
+            <div class="section2-inner">
+                <div class="book-pic">
+                    <img class="book-img" src="" alt="">
                 </div>
-                <div class="form">
-                    <form action="" id="creat-new-user-form">
-                        <input type="text" placeholder="Name" id="name">
-                        <input type="text" placeholder="mail" id="mail">
-                        <input type="password" placeholder="password" id="password">
-                        <div class="login">
-                            <button id="create-account-button" type="submit">CREATE ACCOUNT</button>
-                            <div id="create-account">
-                                <a href="http://localhost:3000/login.html">Login</a>
-                            </div>
-                        </div>
-                    </form>
+                <div class="book-details">
+                    <h1 class="book-name"></h1>
+                    <h2 class="book-author"></h2>
+                    <div class="book-price-cart">
+                        <p class="book-price"></p>
+                        <a href="" id="cartIcon">
+                            <img src="../pic/cart_pic.png" alt="cart">
+                        </a>
+                    </div>
                 </div>
-            </div>   
+            </div>  
         </div>
     </section>
     <script src="./js/app.js"></script>
+    
 </body>
 </html>

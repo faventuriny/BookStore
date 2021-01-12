@@ -5,7 +5,16 @@ const router = new express.Router()
 
 //create new user
 router.post('/users', async (req, res) => {
+    console.log('/users');
     const user = new User(req.body)
+    // const user = new User({
+    //     name: req.body.name,
+    //     mail: req.body.mail,
+    //     password: req.body.password,
+    //     _id: new mongoose.Types.ObjectId()
+    // })
+    console.log('user',user);
+    
     
     try {
         await user.save()
@@ -41,13 +50,31 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 })
 
-//add books to user
-router.post('users/add-book/:id', auth, async (req, res) => {
-    const bookID = req.params.id
+//get the user 
+
+router.get("/users/get", auth, async (req, res) => {
+	try {
+		res.send(req.user);
+	} catch (err) {
+		res.status(500).send(err);
+	}
+});
+
+// add books to user
+router.patch('users/add-book/:id', auth, async (req, res) => {
+
     try {
-        // add to user the book :  req.user.
-    } catch (req) {
+        //req.user.books.push(req.params.id)
+
+        req.user.update(
+            {$push: {books: req.params.id}}
+        )
+
+        await req.user.save()
+        res.send(req.user)
         
+    } catch (e) {
+        res.status(500).send()
     }
 })
 
