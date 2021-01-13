@@ -291,7 +291,7 @@ const addEventClickOnPic = ()=>{
             e.preventDefault()
             const bookID = pic.getAttribute('_id')
             sessionStorage.setItem('bookID', bookID)
-            window.location.href = "http://localhost:3000/single-book.html"
+            window.location.href = "http://localhost:3000/single-book"
         })
     })
 }
@@ -310,7 +310,7 @@ if(document.querySelector('.singleBookClass') !== null){
             }
         })
         .then(async (jsonObj) => {
-            console.log('Book ID:',sessionStorage.getItem('bookID'));
+            console.log('jsonObj', jsonObj);
             
             await setUpSingleBookPage(jsonObj)
             addEventclickOnCart()
@@ -321,7 +321,7 @@ if(document.querySelector('.singleBookClass') !== null){
     }
 }
 
-const setUpSingleBookPage = ()=>{
+const setUpSingleBookPage = (jsonObj)=>{
     changeLoginToUserName()
     
     let bookContainer = document.querySelector(".section2-inner")

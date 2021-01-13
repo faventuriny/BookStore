@@ -8,29 +8,7 @@
     <title>Login</title>
 </head>
 <body class="loginClass">
-    <section>
-        <div class="first-section">
-            <a href="./index.html">
-                <h1>Book Store</h1>
-            </a>
-        </div>
-        <div class="secound-section">
-            <div class="secound-section-inner">
-                <div class="search">
-                    <form action="" id="search-form">
-                        <input id="search-text" type="text" placeholder="search">
-                        <button id="search">🔍</button>
-                    </form>
-                </div>
-                <div class="shopping-cart">
-                    <a id="loginA" href="http://localhost:3000/login.html">Login</a>
-                    <a href="http://localhost:3000/shopping-cart.html">
-                        <img src="../pic/cart_pic.png" alt="card pic">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{>header}}
     <section id="section2">
         <div class="section-2">
             <div class="section-2-inner">
@@ -44,7 +22,7 @@
                         <div class="login">
                             <button type="submit">LOGIN</button>
                             <div id="create-account">
-                                <a href="http://localhost:3000/create-account.html">Create New Account</a>
+                                <a href="http://localhost:3000/create-account">Create New Account</a>
                             </div>
                         </div>
                     </form>
