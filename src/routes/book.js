@@ -1,6 +1,7 @@
 const express = require('express')
 const Book = require('../models/book')
 const router = new express.Router()
+const auth = require('../middleware/auth')
 
 router.post('/books', async (req, res) => {
     const book = new Book(req.body)
@@ -74,5 +75,7 @@ router.delete('/books/:id', async (req, res) => {
         res.status(500).send()
     }
 })
+
+
 
 module.exports = router

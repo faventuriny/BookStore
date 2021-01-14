@@ -1,6 +1,7 @@
 const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const Book = require('../models/book')
 const router = new express.Router()
 
 //set globals variables
@@ -53,16 +54,6 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 })
 
-//get the user 
-
-// router.get("/users/get", auth, async (req, res) => {
-// 	try {
-// 		res.send(req.user);
-// 	} catch (err) {
-// 		res.status(500).send(err);
-// 	}
-// });
-
 // add books to user
 router.patch('/users/add-book/:id', auth, async (req, res) => {
 
@@ -77,6 +68,31 @@ router.patch('/users/add-book/:id', auth, async (req, res) => {
             await user.save()
             res.send(user)
         }
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+// get user and populate all books 
+router.get('/users/books', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id)
+        await user.populate('books').execPopulate()
+        res.send(user) 
+        
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+// delete a book 
+router.delete('/users/books/:id', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id)
+        await user.books.pull({_id: req.params.id})
+        await user.save()
+        res.send(user) 
+        
     } catch (e) {
         res.status(500).send()
     }

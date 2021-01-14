@@ -179,6 +179,8 @@ if(document.querySelector('.newUserClass') !== null){
 
                     sessionStorage.setItem('userName', userName)
                     sessionStorage.setItem('userToken', token)
+
+                    window.location.href = "http://localhost:3000"
                 } catch(e){
                     alert(a)
                 }
@@ -189,11 +191,6 @@ if(document.querySelector('.newUserClass') !== null){
             xhr.setRequestHeader("Content-Type", "application/json");
     
             xhr.send(data);
-
-
-            setTimeout(() => {
-                window.location.href = "http://localhost:3000"
-            }, 1500);
             
         } catch (error) {
             alert("Something went wrong. Please try again")
@@ -231,6 +228,7 @@ if(document.querySelector('.loginClass') !== null){
 
                     console.log("userName",sessionStorage.getItem('userName'));
                     console.log("suserToken", sessionStorage.getItem('userToken'));
+                    window.location.href = "http://localhost:3000"
 
                 }
             });
@@ -240,9 +238,7 @@ if(document.querySelector('.loginClass') !== null){
             xhr.setRequestHeader("Content-Type", "application/json");
 
             xhr.send(data);
-            setTimeout(() => {
-                window.location.href = "http://localhost:3000"
-            }, 1500);
+
         } catch (error) {
             alert("Something went wrong. The email or password is incorrect")
         }
@@ -330,6 +326,98 @@ const addEventclickOnCart = () => {
     })
 }
 
+//load cart from DB
+if(document.querySelector('.ShoppingCartClass') !== null){
+    window.onload = (e)=>{
+        try {
+            let xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+                setCartPage(JSON.parse(this.responseText))
+                addEventListenerToBinIcon()
+            }
+            });
+      
+            xhr.open("GET", 'http://localhost:3000/users/books');
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+            xhr.send();
+
+        } catch (error) {
+            console.log(error); 
+        }
+    }
+}
+
+// set cart page 
+const setCartPage = (jsonObj)=>{
+    changeLoginToUserName()
+    console.log(jsonObj);
+    
+    let sum = 0
+    let total = document.querySelector('#total')
+
+
+    let items = document.querySelector('.items')
+    jsonObj.books.forEach(book=>{
+        let item = document.createElement('div')
+        item.classList.add('item')
+        items.appendChild(item)
+
+        let img = document.createElement('img')
+        img.classList.add('book-img')
+        img.src = book.img
+        item.appendChild(img)
+
+        let h1 = document.createElement('h1')
+        h1.classList.add('book-name')
+        h1.innerHTML = book.bookName
+        item.appendChild(h1)
+
+        let p = document.createElement('p')
+        p.classList.add('book-price')
+        p.innerHTML = book.bookPrice
+        item.appendChild(p)
+        sum += parseInt(book.bookPrice)
+        total.innerHTML = sum
+
+
+        let imgBin = document.createElement('img')
+        imgBin.classList.add('bin')
+        imgBin.src = "../pic/bin.png"
+        imgBin.setAttribute('_id',book._id)
+        item.appendChild(imgBin)
+    })
+    
+}
+
+// event listקner for bin icon
+const addEventListenerToBinIcon = ()=>{
+    let bins = document.querySelectorAll('.bin')
+    bins.forEach(bin=>{
+        bin.addEventListener('click',(e)=>{
+            e.preventDefault()
+
+            let xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+                window.location.href = "http://localhost:3000/shopping-cart"
+            }
+            });
+
+            xhr.open("DELETE", "http://localhost:3000/users/books/" + bin.getAttribute('_id'));
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+
+            xhr.send();
+
+        })
+    })
+}
 
 
  
