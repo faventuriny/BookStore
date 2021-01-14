@@ -38,6 +38,7 @@
 .item img{
     width: 40px;
     height: 40px;
+    cursor: pointer;
 }
 .checkout{
     position: sticky;
