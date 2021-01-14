@@ -5,7 +5,7 @@ let hiddenObj
 
 const changeLoginToUserName = ()=>{
     console.log("user name:",sessionStorage.getItem('userName'));
-    console.log("token",sessionStorage.getItem('token'));
+    console.log("token",sessionStorage.getItem('userToken'));
     
     if(sessionStorage.getItem('userName') !== null){ 
         try {
@@ -178,7 +178,7 @@ if(document.querySelector('.newUserClass') !== null){
                     let token = JSONRes.token
 
                     sessionStorage.setItem('userName', userName)
-                    sessionStorage.setItem('token', token)
+                    sessionStorage.setItem('userToken', token)
                 } catch(e){
                     alert(a)
                 }
@@ -227,10 +227,10 @@ if(document.querySelector('.loginClass') !== null){
                     let token = JSONRes.token
 
                     sessionStorage.setItem('userName', userName)
-                    sessionStorage.setItem('token', token)
+                    sessionStorage.setItem('userToken', token)
 
-                    console.log("sessionStorage.getItem('userName')",sessionStorage.getItem('userName'));
-                    console.log("sessionStorage.getItem('token')", sessionStorage.getItem('token'));
+                    console.log("userName",sessionStorage.getItem('userName'));
+                    console.log("suserToken", sessionStorage.getItem('userToken'));
 
                 }
             });
@@ -249,42 +249,7 @@ if(document.querySelector('.loginClass') !== null){
     })
 }
 
-//push book to cart
-const addEventclickOnCart = () => {
-    document.querySelectorAll('.cartIcon').forEach(cartIcon=>{
-        cartIcon.addEventListener('click',(e)=>{
-            e.preventDefault()
-                            // let data = JSON.stringify({
-                            //     "_id": "5ff806e82ecf3701d6c99ad9",
-                            //     "name": "Penny",
-                            //     "email": "penny@exp.com",
-                            // });
-            try {
-                let xhr = new XMLHttpRequest();
-                xhr.withCredentials = true;
-
-                xhr.addEventListener("readystatechange", function() {
-                if(this.readyState === 4) {
-                    console.log(this.responseText);
-                }
-                });
-                
-                const bookID = cartIcon.getAttribute('_id')
-                let url = 'http://localhost:3000/users/add-book/' + bookID
-
-                xhr.open("PATCH", url);
-                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('token'));
-                xhr.setRequestHeader("Content-Type", "application/json");
-
-                //xhr.send(data);
-                xhr.send();
-            } catch (error) {
-                console.log(error); 
-            }
-        })
-    })
-}
-
+// open new page when click on book's pic
 const addEventClickOnPic = ()=>{
     document.querySelectorAll('.book-img').forEach(pic=>{
         pic.addEventListener('click', (e)=>{
@@ -296,6 +261,7 @@ const addEventClickOnPic = ()=>{
     })
 }
 
+// load single book page
 if(document.querySelector('.singleBookClass') !== null){
     window.onload = (e)=>{
         let url = 'http://localhost:3000/books/' + sessionStorage.getItem('bookID')
@@ -331,6 +297,37 @@ const setUpSingleBookPage = (jsonObj)=>{
     document.querySelector('.book-author').innerHTML = jsonObj.bookAuthor
     document.querySelector('.book-price').innerHTML = jsonObj.bookPrice
     
+}
+
+//push book to cart
+const addEventclickOnCart = () => {
+    document.querySelectorAll('.cartIcon').forEach(cartIcon=>{
+        cartIcon.addEventListener('click',(e)=>{
+            e.preventDefault()
+
+            try {
+                let xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+
+                xhr.addEventListener("readystatechange", function() {
+                if(this.readyState === 4) {
+                    console.log(this.responseText);
+                }
+                });
+                
+                const bookID = cartIcon.getAttribute('_id')
+                let url = 'http://localhost:3000/users/add-book/' + bookID
+
+                xhr.open("PATCH", url);
+                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+                console.log("before xhr.send");
+                xhr.send();
+                console.log("after xhr.send");
+            } catch (error) {
+                console.log(error); 
+            }
+        })
+    })
 }
 
 
