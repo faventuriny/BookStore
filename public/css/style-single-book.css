@@ -12,7 +12,6 @@
     height: 450px;
     margin-right: 50px;
 }
-
 .book-details {
     width: 660px;
     display: flex;
@@ -30,6 +29,31 @@
 }
 .book-author{
     font-size: 1.5em;
+}
+br {
+    display: block;
+    margin: 10px 0;
+    content: " ";
+}
+
+p.bookDescription{
+    font-size: 1em;
+    text-align: left;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    
+}
+div.Publication-date,
+div.div-format{
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+}
+div.Publication-date p,
+div.div-format p{
+    font-size: 1em;
+    text-align: left;
+    margin-right: 10px;
 }
 .book-price-cart{
     width: 100%;

@@ -291,6 +291,9 @@ const setUpSingleBookPage = (jsonObj)=>{
     document.querySelector('.book-img').src = jsonObj.img
     document.querySelector('.book-name').innerHTML = jsonObj.bookName
     document.querySelector('.book-author').innerHTML = jsonObj.bookAuthor
+    document.querySelector('.bookDescription').innerHTML = jsonObj.bookDescription
+    document.querySelector('.PublicationDate').innerHTML = jsonObj.PublicationDate
+    document.querySelector('.format').innerHTML = jsonObj.format
     document.querySelector('.book-price').innerHTML = jsonObj.bookPrice
     
 }

@@ -37,6 +37,7 @@ router.get('/books/:id', async (req, res) => {
     }
 })
 
+// edit book
 router.patch('/books/:id', async (req, res) => {
     
     const updates = Object.keys(req.body)
@@ -61,7 +62,8 @@ router.patch('/books/:id', async (req, res) => {
         res.status(400).send(e)
     }
 })
-    
+  
+
 router.delete('/books/:id', async (req, res) => {
     try {
         const book = await Book.findOneAndDelete({_id: req.params.id})
