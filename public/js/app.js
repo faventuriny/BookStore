@@ -57,17 +57,13 @@ const setUpHomePage = (jsonObj) => {
         dolar.classList.add("book-price")
         bookPriceCart.appendChild(dolar)
 
-        // let a = document.createElement('a')
-        // a.href = ""
-        // a.classList.add('cartIcon')
-        // a.setAttribute('_id',book._id)
-        // bookPriceCart.appendChild(a)
-
-        let img = document.createElement('img') 
+        if(document.querySelector('.indexClass') !== null){
+            let img = document.createElement('img') 
         img.src = "./pic/cart_pic.png"
         img.classList.add('cartIcon')
         img.setAttribute('_id',book._id)
         bookPriceCart.appendChild(img)
+        }
     })
 }
 window.onload = (e) => {
@@ -111,7 +107,6 @@ if(document.querySelector('.indexAdmin') !== null){
         })
         .then(async (jsonObj) => {
             setUpHomePage(jsonObj)
-
             addEventclickOnCart()
             addEventClickOnPicAdmin()
         })
@@ -337,7 +332,6 @@ const setUpSingleBookPage = (jsonObj)=>{
 }
 
 // load single book page admin
-// load single book page
 if(document.querySelector('.singleBookClassAdmin') !== null){
     window.onload = (e)=>{
         let url = 'http://localhost:3000/books/' + sessionStorage.getItem('bookID')
@@ -369,13 +363,15 @@ const setUpSingleBookPageAdmin = (jsonObj)=>{
     console.log('All books obj:', jsonObj); //<< 
     document.querySelector('.book-img').src = jsonObj.img
 
-    document.querySelector('.book-name').placeholder = jsonObj.bookName
-    document.querySelector('.book-author').placeholder = jsonObj.bookAuthor
+    document.querySelector('.book-name').value = jsonObj.bookName
+    document.querySelector('.book-author').value = jsonObj.bookAuthor
     document.querySelector('.bookDescription').innerHTML = jsonObj.bookDescription
-    document.querySelector('.PublicationDate').placeholder = jsonObj.PublicationDate
-    document.querySelector('.format').placeholder = jsonObj.Format
-    document.querySelector('.book-price').placeholder = jsonObj.bookPrice
-    document.querySelector('.bookPic').placeholder = jsonObj.img
+    document.querySelector('.PublicationDate').value = jsonObj.PublicationDate
+    document.querySelector('.format').value = jsonObj.Format
+    document.querySelector('.book-price').value = jsonObj.bookPrice
+    document.querySelector('.bookPic').value = jsonObj.img
+
+    addEventListenerSaveBookEditing()
     
 }
 
@@ -500,6 +496,28 @@ const addEventListenerToBinIcon = ()=>{
             xhr.send();
 
         })
+    })
+}
+
+//event listener for save button after editing book 
+const addEventListenerSaveBookEditing = (e)=>{
+    let form = document.querySelector('#formEditingBook')
+    form.addEventListener('submit', (e)=>{
+        e.preventDefault()
+        console.log('--addEventListenerSaveBookEditing--');
+
+        const bookName = document.querySelector('.book-name').value
+        const bookAuthor = document.querySelector('.book-author').value
+        const bookDescription = document.querySelector('.bookDescription').value
+        const PublicationDate = document.querySelector('.PublicationDate').value
+        const format = document.querySelector('.format').value
+        const bookPrice = document.querySelector('.book-price').value
+        const bookImg = document.querySelector('.bookPic').value
+        
+        console.log(bookName, bookAuthor, bookDescription, PublicationDate, format, bookPrice, bookImg);
+        
+
+
     })
 }
 

@@ -1,3 +1,15 @@
+.divFormEditBook h1,
+.divFormEditBook input,
+.divFormEditBook label,
+.divFormEditBook textarea{
+    color: #6c757d ;
+}
+.divFormEditBook h1:focus,
+.divFormEditBook input:focus,
+.divFormEditBook label:focus,
+.divFormEditBook textarea:focus{
+    color: #495057 ;
+}
 .section2-inner{
     margin-bottom: 50px;
 }
