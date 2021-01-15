@@ -71,6 +71,7 @@ body{
     text-decoration: none;
     color: #1d3557;
     font-weight: 600;
+    margin-right: 10px;
 }
 .secound-section a:hover{
     text-decoration: underline;

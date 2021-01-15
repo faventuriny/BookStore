@@ -18,6 +18,7 @@ const changeLoginToUserName = ()=>{
     }
 }
 
+
 const setUpHomePage = (jsonObj) => {  
     changeLoginToUserName()
     let bookContainer = document.querySelector(".books-inner")
@@ -86,9 +87,33 @@ if(document.querySelector('.indexClass') !== null){
             }
         })
         .then(async (jsonObj) => {
-            await setUpHomePage(jsonObj)
+            setUpHomePage(jsonObj)
             addEventclickOnCart()
             addEventClickOnPic()
+        })
+        .catch((err)=>{
+            console.log(err); 
+        })
+    }
+}
+
+if(document.querySelector('.indexAdmin') !== null){
+    window.onload = (e)=>{
+        fetch(allBooksURL, {
+            method: 'GET'
+        })
+        .then((res)=>{
+            if(res.ok){
+                return res.json()
+            } else {
+                throw new Error(res.status)
+            }
+        })
+        .then(async (jsonObj) => {
+            setUpHomePage(jsonObj)
+
+            addEventclickOnCart()
+            addEventClickOnPicAdmin()
         })
         .catch((err)=>{
             console.log(err); 
@@ -222,9 +247,11 @@ if(document.querySelector('.loginClass') !== null){
                     let JSONRes = JSON.parse(this.responseText) 
                     let userName =  JSONRes.user.name
                     let token = JSONRes.token
+                    let isAdmin = JSONRes.admin
 
                     sessionStorage.setItem('userName', userName)
                     sessionStorage.setItem('userToken', token)
+                    sessionStorage.setItem('isAdmin', isAdmin)
 
                     console.log("userName",sessionStorage.getItem('userName'));
                     console.log("suserToken", sessionStorage.getItem('userToken'));
@@ -253,6 +280,17 @@ const addEventClickOnPic = ()=>{
             const bookID = pic.getAttribute('_id')
             sessionStorage.setItem('bookID', bookID)
             window.location.href = "http://localhost:3000/single-book"
+        })
+    })
+}
+// open new page when click on book's pic ADMIN
+const addEventClickOnPicAdmin = ()=>{
+    document.querySelectorAll('.book-img').forEach(pic=>{
+        pic.addEventListener('click', (e)=>{
+            e.preventDefault()
+            const bookID = pic.getAttribute('_id')
+            sessionStorage.setItem('bookID', bookID)
+            window.location.href = "http://localhost:3000/single-book-admin"
         })
     })
 }
@@ -295,6 +333,49 @@ const setUpSingleBookPage = (jsonObj)=>{
     document.querySelector('.PublicationDate').innerHTML = jsonObj.PublicationDate
     document.querySelector('.format').innerHTML = jsonObj.Format
     document.querySelector('.book-price').innerHTML = jsonObj.bookPrice
+    
+}
+
+// load single book page admin
+// load single book page
+if(document.querySelector('.singleBookClassAdmin') !== null){
+    window.onload = (e)=>{
+        let url = 'http://localhost:3000/books/' + sessionStorage.getItem('bookID')
+        fetch(url, {
+            method: 'GET'
+        })
+        .then((res)=>{
+            if(res.ok){
+                return res.json()
+            } else {
+                throw new Error(res.status)
+            }
+        })
+        .then(async (jsonObj) => {
+            console.log('jsonObj', jsonObj);
+            
+            setUpSingleBookPageAdmin(jsonObj)
+            addEventclickOnCart()
+        })
+        .catch((err)=>{
+            console.log(err); 
+        })
+    }
+}
+
+const setUpSingleBookPageAdmin = (jsonObj)=>{
+    changeLoginToUserName()
+    
+    console.log('All books obj:', jsonObj); //<< 
+    document.querySelector('.book-img').src = jsonObj.img
+
+    document.querySelector('.book-name').placeholder = jsonObj.bookName
+    document.querySelector('.book-author').placeholder = jsonObj.bookAuthor
+    document.querySelector('.bookDescription').innerHTML = jsonObj.bookDescription
+    document.querySelector('.PublicationDate').placeholder = jsonObj.PublicationDate
+    document.querySelector('.format').placeholder = jsonObj.Format
+    document.querySelector('.book-price').placeholder = jsonObj.bookPrice
+    document.querySelector('.bookPic').placeholder = jsonObj.img
     
 }
 

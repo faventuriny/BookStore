@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/style-single-book.css" rel="stylesheet">
+    <link href="./css/style-single-book-admin.css" rel="stylesheet">
+    <title>Book Store</title>
+</head>
+<body class="singleBookClassAdmin">
+    {{>header}}
+    <section id="section2">
+        <div class="section2">
+            <div class="section2-inner">
+                <div class="book-pic">
+                    <img class="book-img" src="" alt="">
+                </div>
+                <div class="divFormEditBook">
+                    <div class="inner-divForm">
+                        <h1>Editing The Book</h1>
+                    </div>
+                    <div class="divForm">
+                        <form action="" id="formEditingBook">
+                        <input type="text" class="book-name">
+                        <input type="text" class="book-author">
+                        <textarea rows="6" cols="70" form="formEditingBook" class="bookDescription"></textarea>
+                        <div>
+                            <label>Publication Date:</label>
+                            <input type="text" class="PublicationDate">
+                        </div>
+                        <div>
+                            <label>Format:</label>
+                            <input type="text" class="format">
+                        </div>
+                        <div>
+                            <label>Price:</label>
+                            <input type="text" class="book-price">
+                        </div>
+                        <input type="text" class="bookPic">
+                        <button>Save</button>
+                    </form>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </section>
+    <script src="./js/app.js"></script>
+    
+</body>
+</html>
