@@ -371,6 +371,8 @@ const setUpSingleBookPageAdmin = (jsonObj)=>{
     document.querySelector('.book-price').value = jsonObj.bookPrice
     document.querySelector('.bookPic').value = jsonObj.img
 
+    document.querySelector('#saveButton').setAttribute('_id', jsonObj._id)
+
     addEventListenerSaveBookEditing()
     
 }
@@ -504,7 +506,6 @@ const addEventListenerSaveBookEditing = (e)=>{
     let form = document.querySelector('#formEditingBook')
     form.addEventListener('submit', (e)=>{
         e.preventDefault()
-        console.log('--addEventListenerSaveBookEditing--');
 
         const bookName = document.querySelector('.book-name').value
         const bookAuthor = document.querySelector('.book-author').value
@@ -514,10 +515,37 @@ const addEventListenerSaveBookEditing = (e)=>{
         const bookPrice = document.querySelector('.book-price').value
         const bookImg = document.querySelector('.bookPic').value
         
-        console.log(bookName, bookAuthor, bookDescription, PublicationDate, format, bookPrice, bookImg);
-        
+        let bookID = document.querySelector('#saveButton').getAttribute('_id')
 
+        try {
+            let data = JSON.stringify({
+                bookName: bookName,
+                bookAuthor: bookAuthor,
+                bookPrice: bookPrice,
+                img: bookImg,
+                Format: format,
+                bookDescription: bookDescription,
+                PublicationDate: PublicationDate,
+            });
 
+            let xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+                window.location.href = "http://localhost:3000/single-book-admin"
+            }
+            });
+
+            xhr.open("PATCH", "http://localhost:3000/books/" + bookID);
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.send(data);
+        } catch (error) {
+            alert(error)
+        }
     })
 }
 

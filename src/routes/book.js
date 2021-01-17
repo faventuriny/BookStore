@@ -38,15 +38,9 @@ router.get('/books/:id', async (req, res) => {
 })
 
 // edit book
-router.patch('/books/:id', async (req, res) => {
+router.patch('/books/:id', auth, async (req, res) => {
     
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['bookName', 'bookAuthor', 'bookPrice', 'bookDescription', 'img']
-    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-
-    if (!isValidOperation) {
-        return res.status(400).send({ error: 'Invalid updates!' })
-    }
 
     try {
         const book = await Book.findOne({_id: req.params.id})
