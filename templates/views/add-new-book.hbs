@@ -8,37 +8,34 @@
     <link href="./css/style-single-book-admin.css" rel="stylesheet">
     <title>Book Store</title>
 </head>
-<body class="singleBookClassAdmin">
+<body class="addNewBook">
     {{>header}}
     <section id="section2">
         <div class="section2">
             <div class="section2-inner">
-                <div class="book-pic">
-                    <img class="book-img" src="" alt="">
-                </div>
                 <div class="divFormEditBook">
                     <div class="inner-divForm">
-                        <h1>Editing The Book</h1>
+                        <h1>Add new book</h1>
                     </div>
                     <div class="divForm">
                         <form action="" id="formEditingBook">
-                        <input type="text" class="book-name">
-                        <input type="text" class="book-author">
-                        <textarea rows="6" cols="70" form="formEditingBook" class="bookDescription"></textarea>
+                        <input type="text" class="book-name" placeholder="Book Name">
+                        <input type="text" class="book-author" placeholder="Book Author">
+                        <textarea rows="6" cols="70" form="formEditingBook" class="bookDescription" placeholder="Book Description"></textarea>
                         <div>
                             <label>Publication Date:</label>
-                            <input type="text" class="PublicationDate" size="11">
+                            <input type="text" class="PublicationDate" placeholder="For example: 01 January 1960" size="28">
                         </div>
                         <div>
                             <label>Format:</label>
-                            <input type="text" class="format" size="22">
+                            <input type="text" class="format" placeholder="For example: Hardback | 224 pages" size="33">
                         </div>
                         <div>
                             <label>Price:</label>
                             <input type="text" class="book-price" size="6">
                         </div>
-                        <input type="text" class="bookPic">
-                        <button type="submit" id="saveButton">Save</button>
+                        <input type="text" class="bookPic" placeholder="Img Path">
+                        <button type="submit" id="addButton">Add Book</button>
                     </form>
                     </div>
                 </div>

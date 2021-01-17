@@ -46,6 +46,10 @@ app.get('/index-admin',(req, res) => {
 app.get('/single-book-admin',(req, res) => {
     res.render('single-book-admin')
 })
+
+app.get('/add-new-book',(req, res) => {
+    res.render('add-new-book')
+})
 app.use(express.json())
 app.use(userRouter)
 app.use(bookRouter)

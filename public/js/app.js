@@ -475,7 +475,7 @@ const setCartPage = (jsonObj)=>{
     
 }
 
-// event listקner for bin icon
+// event listener for bin icon
 const addEventListenerToBinIcon = ()=>{
     let bins = document.querySelectorAll('.bin')
     bins.forEach(bin=>{
@@ -502,7 +502,7 @@ const addEventListenerToBinIcon = ()=>{
 }
 
 //event listener for save button after editing book 
-const addEventListenerSaveBookEditing = (e)=>{
+const addEventListenerSaveBookEditing = (e)=> {
     let form = document.querySelector('#formEditingBook')
     form.addEventListener('submit', (e)=>{
         e.preventDefault()
@@ -548,6 +548,56 @@ const addEventListenerSaveBookEditing = (e)=>{
         }
     })
 }
+
+// event listener for 'Add Book' buttom
+
+if(document.querySelector('.addNewBook') !== null){
+    document.querySelector('#addButton').addEventListener('click', (e)=>{
+        e.preventDefault()
+
+        const bookName = document.querySelector('.book-name').value
+        const bookAuthor = document.querySelector('.book-author').value
+        const bookDescription = document.querySelector('.bookDescription').value
+        const PublicationDate = document.querySelector('.PublicationDate').value
+        const format = document.querySelector('.format').value
+        const bookPrice = document.querySelector('.book-price').value
+        const bookImg = document.querySelector('.bookPic').value
+        
+        try {
+            let data = JSON.stringify({
+                bookName: bookName,
+                bookAuthor: bookAuthor,
+                bookPrice: bookPrice,
+                img: bookImg,
+                Format: format,
+                bookDescription: bookDescription,
+                PublicationDate: PublicationDate,
+            });
+
+            let xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+                window.location.href = "http://localhost:3000/" 
+            }
+            });
+
+            xhr.open("POST", "http://localhost:3000/books");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.send(data);
+
+        } catch (error) {
+            alert(error)
+        }
+
+
+    })
+
+}
+
 
 
  
