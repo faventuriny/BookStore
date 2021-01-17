@@ -467,54 +467,100 @@ const addEventclickOnCart = () => {
     document.querySelectorAll('.cartIcon').forEach(cartIcon=>{
         cartIcon.addEventListener('click',(e)=>{
             e.preventDefault()
+            const bookID = cartIcon.getAttribute('_id')
 
-            try {
-                let xhr = new XMLHttpRequest();
-                xhr.withCredentials = true;
-
-                xhr.addEventListener("readystatechange", function() {
-                if(this.readyState === 4) {
-                    console.log(this.responseText);
+            if(sessionStorage.getItem('userToken') === null){
+                addToCartNoUser(bookID)
+            } else {
+                try {
+                    let xhr = new XMLHttpRequest();
+                    xhr.withCredentials = true;
+    
+                    xhr.addEventListener("readystatechange", function() {
+                    if(this.readyState === 4) {
+                        console.log(this.responseText);
+                    }
+                    });
+                    
+                    let url = 'http://localhost:3000/users/add-book/' + bookID
+    
+                    xhr.open("PATCH", url);
+                    xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+                    console.log("before xhr.send");
+                    xhr.send();
+                    console.log("after xhr.send");
+                } catch (error) {
+                    console.log(error); 
                 }
-                });
-                
-                const bookID = cartIcon.getAttribute('_id')
-                let url = 'http://localhost:3000/users/add-book/' + bookID
-
-                xhr.open("PATCH", url);
-                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
-                console.log("before xhr.send");
-                xhr.send();
-                console.log("after xhr.send");
-            } catch (error) {
-                console.log(error); 
             }
+            
         })
     })
 }
 
-//load cart from DB
+// add books to a virtual cart (no user)
+const addToCartNoUser = (bookID)=>{
+    console.log('--addToCartNoUser--');
+    console.log('cart: ',sessionStorage.getItem('cart'));
+    
+    if(sessionStorage.getItem('cart') === null){
+        sessionStorage.setItem('cart', bookID)
+        console.log('cart: ',sessionStorage.getItem('cart'));
+    } else {
+        let books = sessionStorage.getItem('cart')
+        
+        if(!books.includes(bookID)){
+            books += ',' + bookID
+            sessionStorage.setItem('cart', books)
+            console.log('new cart: ',sessionStorage.getItem('cart'));
+        }  
+    }
+}
+
+//load cart 
 if(document.querySelector('.ShoppingCartClass') !== null){
     window.onload = (e)=>{
-        try {
-            let xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-
-            xhr.addEventListener("readystatechange", function() {
-            if(this.readyState === 4) {
-                console.log(this.responseText);
-                setCartPage(JSON.parse(this.responseText))
-                addEventListenerToBinIcon()
-                addEventListenerToCheckOutButton()
+        if(sessionStorage.getItem('userToken') === null){
+            createJsonBooks()
+            setTimeout(() => {
+                let booksDetails = sessionStorage.getItem('booksDetails')
+                let booksDetailsByList = booksDetails.split('!@#$')
+                booksDetailsByList.shift() // delete the first element that is ""
+                let JSONBooksDetailsByList = []
+                booksDetailsByList.forEach(string=>{
+                    JSONBooksDetailsByList.push(JSON.parse(string)) 
+                })
+               
+                let JSONBooksCart = {
+                    books: JSONBooksDetailsByList
+                }
+                console.log('JSONBooksCart: ', JSONBooksCart);
+                setCartPage(JSONBooksCart)
+                addEventListenerToBinIcon(booksDetails)
+                    //addEventListenerToCheckOutButton()
+            }, 1000);
+            
+        } else {
+            try {
+                let xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+    
+                xhr.addEventListener("readystatechange", function() {
+                if(this.readyState === 4) {
+                    console.log(this.responseText);
+                    setCartPage(JSON.parse(this.responseText))
+                    addEventListenerToBinIcon()
+                    addEventListenerToCheckOutButton()
+                }
+                });
+          
+                xhr.open("GET", 'http://localhost:3000/users/books');
+                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+                xhr.send();
+    
+            } catch (error) {
+                console.log(error); 
             }
-            });
-      
-            xhr.open("GET", 'http://localhost:3000/users/books');
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
-            xhr.send();
-
-        } catch (error) {
-            console.log(error); 
         }
     }
 }
@@ -551,7 +597,6 @@ const setCartPage = (jsonObj)=>{
         sum += parseInt(book.bookPrice)
         total.innerHTML = sum
 
-
         let imgBin = document.createElement('img')
         imgBin.classList.add('bin')
         imgBin.src = "../pic/bin.png"
@@ -561,28 +606,68 @@ const setCartPage = (jsonObj)=>{
     
 }
 
-// event listener for bin icon
-const addEventListenerToBinIcon = ()=>{
-    let bins = document.querySelectorAll('.bin')
-    bins.forEach(bin=>{
-        bin.addEventListener('click',(e)=>{
-            e.preventDefault()
-
+// create books json for non users 
+const createJsonBooks = () => {
+    let booksID = (sessionStorage.getItem('cart')).split(',')
+    sessionStorage.setItem('booksDetails', '')
+    console.log('booksID: ', booksID);// V
+    
+    booksID.forEach(async ID => {
+        try {
             let xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
 
             xhr.addEventListener("readystatechange", function() {
             if(this.readyState === 4) {
-                console.log(this.responseText);
-                window.location.href = "http://localhost:3000/shopping-cart"
+                //console.log(this.responseText);
+                sessionStorage.setItem('booksDetails', sessionStorage.getItem('booksDetails') +'!@#$'+ this.responseText)
             }
             });
 
-            xhr.open("DELETE", "http://localhost:3000/users/books/" + bin.getAttribute('_id'));
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
-
+            xhr.open("GET", "http://localhost:3000/books/" + ID);
+            xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send();
+            
+        } catch (error) {
+            console.log(error); 
+        }
+    })
 
+    
+    
+} 
+// event listener for bin icon
+const addEventListenerToBinIcon = (booksDetails)=>{
+    let bins = document.querySelectorAll('.bin')
+    bins.forEach(bin=>{
+        bin.addEventListener('click',(e)=>{
+            e.preventDefault()
+
+            if(sessionStorage.getItem('userToken') === null){
+                let cart = sessionStorage.getItem('cart')
+                cart = cart.split(',')
+                
+                binID = bin.getAttribute('_id')
+                cart = cart.filter(id => id !== binID)
+                sessionStorage.setItem('cart', cart)
+
+                window.location.href = 'http://localhost:3000/shopping-cart'
+            } else {
+                let xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+
+                xhr.addEventListener("readystatechange", function() {
+                if(this.readyState === 4) {
+                    console.log(this.responseText);
+                    window.location.href = "http://localhost:3000/shopping-cart"
+                }
+                });
+
+                xhr.open("DELETE", "http://localhost:3000/users/books/" + bin.getAttribute('_id'));
+                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+
+                xhr.send();
+            }
         })
     })
 }
