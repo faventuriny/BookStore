@@ -11,6 +11,7 @@
     width: 300px;
     height: 450px;
     margin-right: 50px;
+    box-shadow: 4px 4px 8px #8888;
 }
 .book-details {
     width: 660px;

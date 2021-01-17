@@ -58,12 +58,16 @@ body{
     background-color: #a8dadc;
     border: none;
 }
+.editAddDiv .notDisplay{
+    display: none;
+}
 .shopping-cart{
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 120px;
 }
+
 .secound-section img {
     height: 5vh;
 }
@@ -105,18 +109,28 @@ body{
     width: 200px;
     height: 300px;
     box-shadow: 2px 4px 10px #888888;
-    cursor: pointer;
+    margin-bottom: 20px;
+}
+.divHeaderAndPrice{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+
+}
+.divBookHeader{
+    height: 40px;
 }
 .book-details .book-name{
     font-size: 1em;
-    height: 38px;
     display: flex;
     align-items: flex-end;
     margin-bottom: 0.4em;
+    margin-top: 0;
 }
 .book-price-cart{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     width: 50%;
 }
 .book-details p {
@@ -128,3 +142,27 @@ body{
     width: 30px;
     cursor: pointer;
 }
+
+#editAddDiv{
+    display: flex;
+    justify-content: center;
+}
+
+.EditButton, 
+.deletButton {
+    font-size: 1em;
+    background-color: #1d3557;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px #888888;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.EditButton:hover, 
+.deletButton:hover{
+    color: #a8dadc
+}
+.EditButton{
+    margin-right: 10px;
+}
+

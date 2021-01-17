@@ -98,4 +98,17 @@ router.delete('/users/books/:id', auth, async (req, res) => {
     }
 })
 
+// delete all books in cart 
+router.patch('/users/delete-all-books', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id)
+        user.books = []
+        await user.save()
+        res.send(user) 
+        
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
 module.exports = router

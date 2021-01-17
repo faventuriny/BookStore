@@ -18,8 +18,8 @@ const changeLoginToUserName = ()=>{
     }
 }
 
-
 const setUpHomePage = (jsonObj) => {  
+    addClassNotDesplayForNonAdmin()
     changeLoginToUserName()
     let bookContainer = document.querySelector(".books-inner")
     console.log('All books obj:', jsonObj); //<< 
@@ -35,11 +35,15 @@ const setUpHomePage = (jsonObj) => {
         bookImg.setAttribute('_id',book._id)
         bookDetails.appendChild(bookImg)
 
+        let divBookHeader =document.createElement('div')
+        divBookHeader.classList.add("divBookHeader")
+        bookDetails.appendChild(divBookHeader)
+
         let bookHeader = document.createElement('h1')
         bookHeader.classList.add("book-name")
         let node = document.createTextNode(book.bookName);
         bookHeader.appendChild(node)
-        bookDetails.appendChild(bookHeader) //book-name
+        divBookHeader.appendChild(bookHeader) //book-name
 
         let bookPriceCart = document.createElement('div')
         bookPriceCart.classList.add("book-price-cart")
@@ -57,13 +61,68 @@ const setUpHomePage = (jsonObj) => {
         dolar.classList.add("book-price")
         bookPriceCart.appendChild(dolar)
 
-        if(document.querySelector('.indexClass') !== null){
-            let img = document.createElement('img') 
+        let img = document.createElement('img') 
         img.src = "./pic/cart_pic.png"
         img.classList.add('cartIcon')
         img.setAttribute('_id',book._id)
         bookPriceCart.appendChild(img)
-        }
+        
+    })
+}
+
+const setUpHomePageAdmin = (jsonObj) => {  
+    changeLoginToUserName()
+    let bookContainer = document.querySelector(".books-inner")
+    console.log('All books obj:', jsonObj); //<< 
+    
+    jsonObj.forEach((book)=>{
+        let bookDetails = document.createElement('div') 
+        bookDetails.classList.add("book-details")
+        bookContainer.appendChild(bookDetails)
+
+        let bookImg = document.createElement('img')
+        bookImg.src = book.img
+        bookImg.classList.add("book-img")
+        bookDetails.appendChild(bookImg)
+
+        let editAddDiv = document.createElement('div')
+        editAddDiv.classList.add("editAddDiv")
+        bookDetails.appendChild(editAddDiv)
+
+        let editButton = document.createElement('button')
+        editButton.classList.add('EditButton')
+        editButton.setAttribute('_id', book._id)
+        editButton.innerHTML = 'Edit'
+        editAddDiv.appendChild(editButton)
+
+        let deletButton = document.createElement('button')
+        deletButton.classList.add('deletButton')
+        deletButton.setAttribute('_id', book._id)
+        deletButton.innerHTML = 'Delete'
+        editAddDiv.appendChild(deletButton)
+
+        let divBookHeader =document.createElement('div')
+        divBookHeader.classList.add("divBookHeader")
+        bookDetails.appendChild(divBookHeader)
+
+        let bookHeader = document.createElement('h1')
+        bookHeader.classList.add("book-name")
+        let node = document.createTextNode(book.bookName);
+        bookHeader.appendChild(node)
+        divBookHeader.appendChild(bookHeader) //book-name
+        
+        let divHeaderAndPrice = document.createElement('div')
+        divHeaderAndPrice.classList.add("divHeaderAndPrice")
+        bookDetails.appendChild(divHeaderAndPrice)
+
+        let bookPriceCart = document.createElement('div')
+        bookPriceCart.classList.add("book-price-cart")
+        divHeaderAndPrice.appendChild(bookPriceCart)
+
+        let bookPrice = document.createElement('p')
+        bookPrice.innerHTML = book.bookPrice + '$'
+        bookPrice.classList.add("book-price")
+        divHeaderAndPrice.appendChild(bookPrice)
     })
 }
 window.onload = (e) => {
@@ -106,9 +165,9 @@ if(document.querySelector('.indexAdmin') !== null){
             }
         })
         .then(async (jsonObj) => {
-            setUpHomePage(jsonObj)
-            addEventclickOnCart()
-            addEventClickOnPicAdmin()
+            setUpHomePageAdmin(jsonObj)
+            addEventClickOnEditButton()
+            addEventClickOnDeletButton()
         })
         .catch((err)=>{
             console.log(err); 
@@ -248,8 +307,6 @@ if(document.querySelector('.loginClass') !== null){
                     sessionStorage.setItem('userToken', token)
                     sessionStorage.setItem('isAdmin', isAdmin)
 
-                    console.log("userName",sessionStorage.getItem('userName'));
-                    console.log("suserToken", sessionStorage.getItem('userToken'));
                     window.location.href = "http://localhost:3000"
 
                 }
@@ -278,16 +335,44 @@ const addEventClickOnPic = ()=>{
         })
     })
 }
-// open new page when click on book's pic ADMIN
-const addEventClickOnPicAdmin = ()=>{
-    document.querySelectorAll('.book-img').forEach(pic=>{
-        pic.addEventListener('click', (e)=>{
+
+const addEventClickOnEditButton = ()=>{
+    document.querySelectorAll('.EditButton').forEach(button=>{
+        button.addEventListener('click', (e)=>{
             e.preventDefault()
-            const bookID = pic.getAttribute('_id')
+            const bookID = button.getAttribute('_id')
             sessionStorage.setItem('bookID', bookID)
             window.location.href = "http://localhost:3000/single-book-admin"
         })
     })
+}
+
+const addEventClickOnDeletButton = ()=>{
+    document.querySelectorAll('.deletButton').forEach(button=>{
+        button.addEventListener('click', (e)=>{
+            e.preventDefault()
+            console.log('deleted book:',button.getAttribute('_id'));
+            deleteBook(button.getAttribute('_id'))
+        })
+    })
+}
+
+const deleteBook = (bookID) => {
+
+    let xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function() {
+    if(this.readyState === 4) {
+        console.log(this.responseText);
+        window.location.href = "http://localhost:3000/index-admin"
+    }
+    });
+
+    xhr.open("DELETE", "http://localhost:3000/books/" +bookID);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send();
 }
 
 // load single book page
@@ -420,6 +505,7 @@ if(document.querySelector('.ShoppingCartClass') !== null){
                 console.log(this.responseText);
                 setCartPage(JSON.parse(this.responseText))
                 addEventListenerToBinIcon()
+                addEventListenerToCheckOutButton()
             }
             });
       
@@ -550,7 +636,6 @@ const addEventListenerSaveBookEditing = (e)=> {
 }
 
 // event listener for 'Add Book' buttom
-
 if(document.querySelector('.addNewBook') !== null){
     document.querySelector('#addButton').addEventListener('click', (e)=>{
         e.preventDefault()
@@ -597,6 +682,40 @@ if(document.querySelector('.addNewBook') !== null){
     })
 
 }
+
+// add class not display
+const addClassNotDesplayForNonAdmin = ()=>{
+    console.log('isAdmin', sessionStorage.getItem('isAdmin'));
+    
+    if(sessionStorage.getItem('isAdmin') === 'false' || sessionStorage.getItem('isAdmin') === undefined || sessionStorage.getItem('isAdmin') === null){
+        document.querySelector('.editAddDiv').classList.add('notDisplay')
+    }
+}
+
+// add event listener to 'checkout button
+
+const addEventListenerToCheckOutButton = ()=>{
+    document.querySelector('.checkoutButton').addEventListener('click', (e)=>{
+        e.preventDefault()
+
+        let xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+            console.log('Deleted All Books!');
+            window.location.href = "http://localhost:3000/shopping-cart"
+        }
+        });
+
+        xhr.open("PATCH", "http://localhost:3000/users/delete-all-books");
+        xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+
+        xhr.send();
+    })
+}
+
 
 
 
