@@ -84,3 +84,76 @@
 .checkoutButton{
     cursor: pointer;
 }
+@media only screen and (max-width: 710px) {
+    .section-2-inner{
+        width: 80vw;
+    }
+    .section-2-inner h1.shopping-cart-title{
+        font-size: 1.8em;
+    }
+    .item{
+        width: 75vw;
+    }
+    .item .book-img{
+        width: 30vw;
+        height: auto;
+    }
+    .item .book-name{
+        font-size: 1em;
+    }
+    .checkout{
+        width: 80vw;
+        padding-left: 45vw;
+    }
+}
+@media only screen and (max-width: 550px){
+
+    .section-2-inner{
+        width: 70vw;
+    }
+    .item{
+        width: 68vw;
+        padding: 5px;
+    }
+
+    .checkout{
+        width: 70vw;
+        padding-left: 30vw;
+    }
+}
+
+@media only screen and (max-width: 420px){
+
+    /* .section-2-inner{
+        width: 60vw;
+    }
+    .item{
+        width: 58vw;
+    }
+    .item .book-img{
+        width: 20vw;
+    } */
+    .item .book-name{
+        font-size: 0.75em;
+    }
+    p{
+        font-size: 0.75em;
+    }
+    .item img{
+        width: 8vw;
+        height: auto;
+    }
+    .checkout{
+        width: 50vw;
+        padding-left: 20vw;
+    }
+    .checkout-inner h1,
+    .checkout-inner p{
+        font-size: 1.2em;
+    }
+    .checkout-inner button{
+        width: 20vw;
+        height: auto;
+        font-size: 0.8em;
+    }
+}

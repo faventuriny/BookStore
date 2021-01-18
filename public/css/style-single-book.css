@@ -60,3 +60,33 @@ div.div-format p{
     width: 100%;
     justify-content: left;
 }
+@media only screen and (max-width: 960px){
+    .section2-inner{
+        width: 80vw;
+    }
+    .book-pic img{
+        width: 20vw;
+        height: auto;
+    }
+    .book-details{
+        width: 80vw;
+    }
+}
+@media only screen and (max-width: 640px){
+    .section2-inner{
+        flex-direction: column-reverse;
+        margin-top: 25px;
+    }
+    .book-pic img{
+        margin-left: 20px;
+    }
+
+}
+@media only screen and (max-width: 481px){
+    .book-pic img{
+        width: 40vw;
+    }
+}
+@media only screen and (max-width: 320px){
+
+}
