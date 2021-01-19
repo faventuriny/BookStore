@@ -232,6 +232,7 @@ searchForm.addEventListener('submit', (e)=>{
 
 // Create new user
 if(document.querySelector('.newUserClass') !== null){
+    addClassNotDesplayForNonAdmin()
     const creatNewUserForm= document.querySelector('#creat-new-user-form')
 
     creatNewUserForm.addEventListener('submit', (e)=>{
@@ -279,7 +280,7 @@ if(document.querySelector('.newUserClass') !== null){
 
 //Login
 if(document.querySelector('.loginClass') !== null){
-    
+    addClassNotDesplayForNonAdmin()
     const loginForm = document.querySelector("#login-form")
     loginForm.addEventListener('submit', (e)=>{
         
@@ -389,10 +390,10 @@ if(document.querySelector('.singleBookClass') !== null){
                 throw new Error(res.status)
             }
         })
-        .then(async (jsonObj) => {
+        .then((jsonObj) => {
             console.log('jsonObj', jsonObj);
             
-            await setUpSingleBookPage(jsonObj)
+            setUpSingleBookPage(jsonObj)
             addEventclickOnCart()
         })
         .catch((err)=>{
@@ -403,6 +404,7 @@ if(document.querySelector('.singleBookClass') !== null){
 
 const setUpSingleBookPage = (jsonObj)=>{
     changeLoginToUserName()
+    addClassNotDesplayForNonAdmin()
     
     let bookContainer = document.querySelector(".section2-inner")
     console.log('All books obj:', jsonObj); //<< 
@@ -519,27 +521,10 @@ const addToCartNoUser = (bookID)=>{
 
 //load cart 
 if(document.querySelector('.ShoppingCartClass') !== null){
-    window.onload = (e)=>{
+    window.onload = ()=>{
         if(sessionStorage.getItem('userToken') === null){
-            createJsonBooks()
-            setTimeout(() => {
-                let booksDetails = sessionStorage.getItem('booksDetails')
-                let booksDetailsByList = booksDetails.split('!@#$')
-                booksDetailsByList.shift() // delete the first element that is ""
-                let JSONBooksDetailsByList = []
-                booksDetailsByList.forEach(string=>{
-                    JSONBooksDetailsByList.push(JSON.parse(string)) 
-                })
-               
-                let JSONBooksCart = {
-                    books: JSONBooksDetailsByList
-                }
-                console.log('JSONBooksCart: ', JSONBooksCart);
-                setCartPage(JSONBooksCart)
-                addEventListenerToBinIcon(booksDetails)
-                    //addEventListenerToCheckOutButton()
-            }, 1000);
-            
+            getAllBooksDetails()
+ 
         } else {
             try {
                 let xhr = new XMLHttpRequest();
@@ -568,6 +553,7 @@ if(document.querySelector('.ShoppingCartClass') !== null){
 // set cart page 
 const setCartPage = (jsonObj)=>{
     changeLoginToUserName()
+    addClassNotDesplayForNonAdmin()
     console.log(jsonObj);
     
     let sum = 0
@@ -606,38 +592,35 @@ const setCartPage = (jsonObj)=>{
     
 }
 
-// create books json for non users 
-const createJsonBooks = () => {
-    let booksID = (sessionStorage.getItem('cart')).split(',')
-    sessionStorage.setItem('booksDetails', '')
-    console.log('booksID: ', booksID);// V
-    
-    booksID.forEach(async ID => {
-        try {
-            let xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-
-            xhr.addEventListener("readystatechange", function() {
-            if(this.readyState === 4) {
-                //console.log(this.responseText);
-                sessionStorage.setItem('booksDetails', sessionStorage.getItem('booksDetails') +'!@#$'+ this.responseText)
-            }
-            });
-
-            xhr.open("GET", "http://localhost:3000/books/" + ID);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send();
-            
-        } catch (error) {
-            console.log(error); 
-        }
+// get data of one book
+const getData = (url) =>{
+    return new Promise((resolve, reject)=>{
+        fetch(url)
+        .then( response => response.json())
+        .then(data => {
+            resolve(data)
+        })
     })
+}
 
-    
-    
-} 
+// get for all book details
+const getAllBooksDetails = () => {
+    let booksID = (sessionStorage.getItem('cart')).split(',')
+    let listOfBooks = []
+
+    booksID.forEach(
+        (ID)=>{
+            listOfBooks.push(getData(`http://localhost:3000/books/${ID}`)) 
+        })
+    Promise.all(listOfBooks).then((allBooksData)=>{
+        console.log(allBooksData);
+        let JSON = {books: allBooksData}
+        setCartPage(JSON)
+        addEventListenerToBinIcon()
+    })
+}
 // event listener for bin icon
-const addEventListenerToBinIcon = (booksDetails)=>{
+const addEventListenerToBinIcon = ()=>{
     let bins = document.querySelectorAll('.bin')
     bins.forEach(bin=>{
         bin.addEventListener('click',(e)=>{
@@ -778,7 +761,6 @@ const addClassNotDesplayForNonAdmin = ()=>{
 }
 
 // add event listener to 'checkout button
-
 const addEventListenerToCheckOutButton = ()=>{
     document.querySelector('.checkoutButton').addEventListener('click', (e)=>{
         e.preventDefault()
