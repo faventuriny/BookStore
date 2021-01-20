@@ -8,7 +8,6 @@ const changeLoginToUserName = ()=>{
     console.log("token",sessionStorage.getItem('userToken'));
     console.log("isAdmin", sessionStorage.getItem('isAdmin') );
     
-    
     if(sessionStorage.getItem('userName') !== null){ 
         try {
             let loginA = document.querySelector('#loginA')
@@ -23,6 +22,7 @@ const changeLoginToUserName = ()=>{
 const setUpHomePage = (jsonObj) => {  
     addAdminOptions()
     changeLoginToUserName()
+    ChangeNumberInCart()
     let bookContainer = document.querySelector(".books-inner")
     console.log('All books obj:', jsonObj); //<< 
     
@@ -74,6 +74,7 @@ const setUpHomePage = (jsonObj) => {
 
 const setUpHomePageAdmin = (jsonObj) => {  
     changeLoginToUserName()
+    ChangeNumberInCart()
     let bookContainer = document.querySelector(".books-inner")
     console.log('All books obj:', jsonObj); //<< 
     
@@ -129,8 +130,10 @@ const setUpHomePageAdmin = (jsonObj) => {
 }
 window.onload = (e) => {
     changeLoginToUserName()
+    ChangeNumberInCart()
 }
 
+// load home page
 if(document.querySelector('.indexClass') !== null){
     window.onload = (e)=>{
         fetch(allBooksURL, {
@@ -154,6 +157,7 @@ if(document.querySelector('.indexClass') !== null){
     }
 }
 
+// load editing page for admin
 if(document.querySelector('.indexAdmin') !== null){
     window.onload = (e)=>{
         fetch(allBooksURL, {
@@ -180,6 +184,7 @@ if(document.querySelector('.indexAdmin') !== null){
 // search and show a book 
 const searchForm = document.querySelector('#search-form')
 
+// add event listener to search form
 searchForm.addEventListener('submit', (e)=>{
     e.preventDefault()
     let bookToSearch = document.querySelector('#search-text').value
@@ -324,7 +329,7 @@ if(document.querySelector('.loginClass') !== null){
     })
 }
 
-// open new page when click on book's pic
+// add event listener on 'pic' and then open the book page
 const addEventClickOnPic = ()=>{
     document.querySelectorAll('.book-img').forEach(pic=>{
         pic.addEventListener('click', (e)=>{
@@ -404,6 +409,7 @@ if(document.querySelector('.singleBookClass') !== null){
 const setUpSingleBookPage = (jsonObj)=>{
     changeLoginToUserName()
     addAdminOptions()
+    ChangeNumberInCart()
     
     let bookContainer = document.querySelector(".section2-inner")
     console.log('All books obj:', jsonObj); //<< 
@@ -445,6 +451,7 @@ if(document.querySelector('.singleBookClassAdmin') !== null){
 
 const setUpSingleBookPageAdmin = (jsonObj)=>{
     changeLoginToUserName()
+    ChangeNumberInCart()
     
     console.log('All books obj:', jsonObj); //<< 
     document.querySelector('.book-img').src = jsonObj.img
@@ -472,6 +479,7 @@ const addEventclickOnCart = () => {
 
             if(sessionStorage.getItem('userToken') === null){
                 addToCartNoUser(bookID)
+                ChangeNumberInCart()
             } else {
                 try {
                     let xhr = new XMLHttpRequest();
@@ -480,6 +488,7 @@ const addEventclickOnCart = () => {
                     xhr.addEventListener("readystatechange", function() {
                     if(this.readyState === 4) {
                         console.log(this.responseText);
+                        ChangeNumberInCart()
                     }
                     });
                     
@@ -516,41 +525,76 @@ const addToCartNoUser = (bookID)=>{
     }
 }
 
-//load cart 
+//load cart page
 if(document.querySelector('.ShoppingCartClass') !== null){
     window.onload = ()=>{
         if(sessionStorage.getItem('userToken') === null){
-            getAllBooksDetails()
+            getBooksAndSetCartPageNonUser()
  
         } else {
-            try {
-                let xhr = new XMLHttpRequest();
-                xhr.withCredentials = true;
-    
-                xhr.addEventListener("readystatechange", function() {
-                if(this.readyState === 4) {
-                    console.log(this.responseText);
-                    setCartPage(JSON.parse(this.responseText))
-                    addEventListenerToBinIcon()
-                    addEventListenerToCheckOutButton()
-                }
-                });
-          
-                xhr.open("GET", 'http://localhost:3000/users/books');
-                xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
-                xhr.send();
-    
-            } catch (error) {
-                console.log(error); 
-            }
+            getBooksAndSetCartPage()
         }
     }
 }
 
+
+// get all books
+const getBooksAndSetCartPage = () => {
+    try {
+        let xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+            setCartPage(JSON.parse(this.responseText))
+            addEventListenerToBinIcon()
+            addEventListenerToCheckOutButton()
+        }
+        });
+  
+        xhr.open("GET", 'http://localhost:3000/users/books');
+        xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+        xhr.send();
+
+    } catch (error) {
+        console.log(error); 
+    }
+}
+// get data of one book
+const getData = (url) =>{
+    return new Promise((resolve, reject)=>{
+        fetch(url)
+        .then( response => response.json())
+        .then(data => {
+            resolve(data)
+        })
+    })
+}
+
+// get all book details for non unser
+const getBooksAndSetCartPageNonUser = () => {
+    if(sessionStorage.getItem('cart')!==null){
+        let booksID = (sessionStorage.getItem('cart')).split(',')
+        let listOfBooks = []
+
+        booksID.forEach(
+            (ID)=>{
+                listOfBooks.push(getData(`http://localhost:3000/books/${ID}`)) 
+            })
+        Promise.all(listOfBooks).then((allBooksData)=>{
+            console.log(allBooksData);
+            let JSON = {books: allBooksData}
+            setCartPage(JSON)
+            addEventListenerToBinIcon()
+        })
+    }   
+}
 // set cart page 
 const setCartPage = (jsonObj)=>{
     changeLoginToUserName()
     addAdminOptions()
+    ChangeNumberInCart()
     console.log(jsonObj);
     
     let sum = 0
@@ -587,34 +631,6 @@ const setCartPage = (jsonObj)=>{
         item.appendChild(imgBin)
     })
     
-}
-
-// get data of one book
-const getData = (url) =>{
-    return new Promise((resolve, reject)=>{
-        fetch(url)
-        .then( response => response.json())
-        .then(data => {
-            resolve(data)
-        })
-    })
-}
-
-// get for all book details
-const getAllBooksDetails = () => {
-    let booksID = (sessionStorage.getItem('cart')).split(',')
-    let listOfBooks = []
-
-    booksID.forEach(
-        (ID)=>{
-            listOfBooks.push(getData(`http://localhost:3000/books/${ID}`)) 
-        })
-    Promise.all(listOfBooks).then((allBooksData)=>{
-        console.log(allBooksData);
-        let JSON = {books: allBooksData}
-        setCartPage(JSON)
-        addEventListenerToBinIcon()
-    })
 }
 // event listener for bin icon
 const addEventListenerToBinIcon = ()=>{
@@ -748,15 +764,6 @@ if(document.querySelector('.addNewBook') !== null){
 
 }
 
-// add class not display
-// const addClassNotDesplayForNonAdmin = ()=>{
-//     console.log('isAdmin', sessionStorage.getItem('isAdmin'));
-    
-//     if(sessionStorage.getItem('isAdmin') === 'false' || sessionStorage.getItem('isAdmin') === undefined || sessionStorage.getItem('isAdmin') === null){
-//         document.querySelector('.editAddDiv').classList.add('notDisplay')
-//     }
-// }
-
 // add event listener to 'checkout button
 const addEventListenerToCheckOutButton = ()=>{
     document.querySelector('.checkoutButton').addEventListener('click', (e)=>{
@@ -797,6 +804,40 @@ const addAdminOptions = () => {
         addByAdmin.href = 'http://localhost:3000/add-new-book'
         addByAdmin.innerHTML = 'Add'
         editAddDiv.appendChild(addByAdmin)
+    }
+}
+
+// change number of items in the cart 
+const ChangeNumberInCart = () => {
+    let numberInCart = document.querySelector('#numberInCart')
+    
+    if(sessionStorage.getItem('userToken') === null){
+        if(sessionStorage.getItem('cart') !== null){
+            let booksID = (sessionStorage.getItem('cart')).split(',')
+            let sum = booksID.length
+            numberInCart.innerHTML = sum
+        }
+    } else {
+        try {
+            let xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+    
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+                let books = JSON.parse(this.responseText)
+                let sum = books.books.length
+                numberInCart.innerHTML = sum
+            }
+            });
+      
+            xhr.open("GET", 'http://localhost:3000/users/books');
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
+            xhr.send();
+    
+        } catch (error) {
+            console.log(error); 
+        }
     }
 }
 
