@@ -87,6 +87,9 @@ div.div-format p{
         width: 40vw;
     }
 }
-@media only screen and (max-width: 320px){
-
+@media only screen and (max-width: 480px){
+    .section2-inner{
+        width: 95vw;
+        margin-top: 10px;
+    }
 }

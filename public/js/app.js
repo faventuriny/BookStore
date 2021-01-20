@@ -20,9 +20,7 @@ const changeLoginToUserName = ()=>{
 }
 
 const setUpHomePage = (jsonObj) => {  
-    addAdminOptions()
-    changeLoginToUserName()
-    ChangeNumberInCart()
+    changePageAfterLoading()
     let bookContainer = document.querySelector(".books-inner")
     console.log('All books obj:', jsonObj); //<< 
     
@@ -73,8 +71,7 @@ const setUpHomePage = (jsonObj) => {
 }
 
 const setUpHomePageAdmin = (jsonObj) => {  
-    changeLoginToUserName()
-    ChangeNumberInCart()
+    changePageAfterLoading()
     let bookContainer = document.querySelector(".books-inner")
     console.log('All books obj:', jsonObj); //<< 
     
@@ -129,8 +126,7 @@ const setUpHomePageAdmin = (jsonObj) => {
     })
 }
 window.onload = (e) => {
-    changeLoginToUserName()
-    ChangeNumberInCart()
+    changePageAfterLoading()
 }
 
 // load home page
@@ -407,9 +403,7 @@ if(document.querySelector('.singleBookClass') !== null){
 }
 
 const setUpSingleBookPage = (jsonObj)=>{
-    changeLoginToUserName()
-    addAdminOptions()
-    ChangeNumberInCart()
+    changePageAfterLoading()
     
     let bookContainer = document.querySelector(".section2-inner")
     console.log('All books obj:', jsonObj); //<< 
@@ -450,8 +444,7 @@ if(document.querySelector('.singleBookClassAdmin') !== null){
 }
 
 const setUpSingleBookPageAdmin = (jsonObj)=>{
-    changeLoginToUserName()
-    ChangeNumberInCart()
+    changePageAfterLoading()
     
     console.log('All books obj:', jsonObj); //<< 
     document.querySelector('.book-img').src = jsonObj.img
@@ -479,7 +472,7 @@ const addEventclickOnCart = () => {
 
             if(sessionStorage.getItem('userToken') === null){
                 addToCartNoUser(bookID)
-                ChangeNumberInCart()
+                ChangeNumberOfBooksInCart()
             } else {
                 try {
                     let xhr = new XMLHttpRequest();
@@ -488,7 +481,7 @@ const addEventclickOnCart = () => {
                     xhr.addEventListener("readystatechange", function() {
                     if(this.readyState === 4) {
                         console.log(this.responseText);
-                        ChangeNumberInCart()
+                        ChangeNumberOfBooksInCart()
                     }
                     });
                     
@@ -592,9 +585,7 @@ const getBooksAndSetCartPageNonUser = () => {
 }
 // set cart page 
 const setCartPage = (jsonObj)=>{
-    changeLoginToUserName()
-    addAdminOptions()
-    ChangeNumberInCart()
+    changePageAfterLoading()
     console.log(jsonObj);
     
     let sum = 0
@@ -808,7 +799,7 @@ const addAdminOptions = () => {
 }
 
 // change number of items in the cart 
-const ChangeNumberInCart = () => {
+const ChangeNumberOfBooksInCart = () => {
     let numberInCart = document.querySelector('#numberInCart')
     
     if(sessionStorage.getItem('userToken') === null){
@@ -824,7 +815,6 @@ const ChangeNumberInCart = () => {
     
             xhr.addEventListener("readystatechange", function() {
             if(this.readyState === 4) {
-                console.log(this.responseText);
                 let books = JSON.parse(this.responseText)
                 let sum = books.books.length
                 numberInCart.innerHTML = sum
@@ -839,6 +829,57 @@ const ChangeNumberInCart = () => {
             console.log(error); 
         }
     }
+}
+
+const addLogoutButton = ()=>{
+    if(sessionStorage.getItem('userName') !== null){
+        document.querySelector('#logout').innerHTML = '(Logout)'
+        addEventListenerLogoutButton()
+    }
+    
+}
+const diconectUser = ()=> {
+    console.log('--diconectUser--');
+    
+    try {
+        console.log('--diconectUser--TRY--');
+        
+        let xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+            console.log('your logout!');
+            document.querySelector('#logout').innerHTML = ''
+            sessionStorage.removeItem('userName')   
+            sessionStorage.removeItem('userToken')
+            sessionStorage.removeItem('isAdmin')
+            window.location.href = "http://localhost:3000"
+        }
+        });
+
+        xhr.open("POST", "http://localhost:3000/users/logout");
+        xhr.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('userToken')}`);
+
+        xhr.send();
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+const addEventListenerLogoutButton = ()=>{
+    document.querySelector('#logout').addEventListener('click', (e)=>{
+        e.preventDefault()
+        diconectUser()
+    })
+}
+
+const changePageAfterLoading = ()=> {
+    addAdminOptions()
+    addLogoutButton()
+    changeLoginToUserName()
+    ChangeNumberOfBooksInCart()
 }
 
 

@@ -65,9 +65,12 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 120px;
+    width: 250px;
 }
-
+#logout{
+    cursor: pointer;
+    margin-right: 10px;
+}
 .secound-section img {
     height: 5vh;
 }
@@ -166,19 +169,39 @@ body{
 .EditButton{
     margin-right: 10px;
 }
+@media only screen and (max-width: 960px) {
+    .secound-section-inner{
+        width: 100%;
+        padding: 5px 20px;
+    }
+   
+}
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 640px) {
+    .secound-section{
+        height: auto;
+    }
+    .secound-section-inner{
+        flex-direction: column;
+    }
+    #search-text{
+        width: 60vw;
+    }
+   
+}
+
+@media only screen and (max-width: 480px) {    
+    #search-text{
+        width: 40vw;
+    }
     h1{
         font-size: 1.2em;
     }
-    .secound-section{
-        padding: 10px;
-    }
     .secound-section form input{
-        width: 120px;
+        width: 12vw;
     }
     .books-inner{
-        margin-top: 50px;
+        margin-top: 15px;
     }
     .book-details{
         width: 300px;
@@ -189,8 +212,8 @@ body{
     }
 }
 
-@media only screen and (max-width: 360px) {
-    .books-inner{
+@media only screen and (max-width: 340px) {
+  .books-inner{
         margin-top: 20px;
     }
     .book-details{
@@ -203,6 +226,9 @@ body{
 }
 
 @media only screen and (max-width: 320px) {
+    /* #inner-search{
+        display: none;
+    } */
     h1{
         font-size: 1em;
     }
@@ -215,7 +241,5 @@ body{
     .secound-section a{
         font-size: 0.75em; 
     }
-    .shopping-cart{
-        width: 80px;
-    }
+    
 }

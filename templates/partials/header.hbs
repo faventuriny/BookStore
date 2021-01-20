@@ -8,8 +8,11 @@
         <div class="secound-section-inner">
             <div class="search">
                 <form action="" id="search-form">
-                    <input id="search-text" type="text" placeholder="search">
-                    <button id="search">🔍</button>
+                    <div id="inner-search">
+                        <input id="search-text" type="text" placeholder="search">
+                        <button id="search">🔍</button>
+                    </div>
+                    
                     {{!-- <div class="editAddDiv">
                         <a class="editByAdmin" href="http://localhost:3000/index-admin">Edit /</a>
                         <a class="addByAdmin" href="http://localhost:3000/add-new-book">Add</a>
@@ -17,7 +20,7 @@
                 </form>
             </div>
             <div class="shopping-cart">
-                
+                <p id="logout"></p>
                 <a id="loginA" href="http://localhost:3000/login">Login</a>
                 <a href="http://localhost:3000/shopping-cart">
                     <img src="../pic/cart_pic.png" alt="card pic">
@@ -25,5 +28,6 @@
                 <a href="http://localhost:3000/shopping-cart" id="numberInCart"></a>
             </div>
         </div>
+        
     </div>
 </section>
