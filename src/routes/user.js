@@ -61,9 +61,7 @@ router.patch('/users/add-book/:id', auth, async (req, res) => {
         const user = await User.findById(req.user._id)
         
         let books = user.books
-        if(books.includes(req.params.id)){
-            throw new Error('The book allready excist in the cart')
-        } else {
+        if(!books.includes(req.params.id)){
             user.books.push(req.params.id)
             await user.save()
             res.send(user)

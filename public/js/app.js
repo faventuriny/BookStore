@@ -6,6 +6,8 @@ let hiddenObj
 const changeLoginToUserName = ()=>{
     console.log("user name:",sessionStorage.getItem('userName'));
     console.log("token",sessionStorage.getItem('userToken'));
+    console.log("isAdmin", sessionStorage.getItem('isAdmin') );
+    
     
     if(sessionStorage.getItem('userName') !== null){ 
         try {
@@ -19,7 +21,7 @@ const changeLoginToUserName = ()=>{
 }
 
 const setUpHomePage = (jsonObj) => {  
-    addClassNotDesplayForNonAdmin()
+    addAdminOptions()
     changeLoginToUserName()
     let bookContainer = document.querySelector(".books-inner")
     console.log('All books obj:', jsonObj); //<< 
@@ -232,7 +234,6 @@ searchForm.addEventListener('submit', (e)=>{
 
 // Create new user
 if(document.querySelector('.newUserClass') !== null){
-    addClassNotDesplayForNonAdmin()
     const creatNewUserForm= document.querySelector('#creat-new-user-form')
 
     creatNewUserForm.addEventListener('submit', (e)=>{
@@ -280,7 +281,7 @@ if(document.querySelector('.newUserClass') !== null){
 
 //Login
 if(document.querySelector('.loginClass') !== null){
-    addClassNotDesplayForNonAdmin()
+    
     const loginForm = document.querySelector("#login-form")
     loginForm.addEventListener('submit', (e)=>{
         
@@ -302,26 +303,24 @@ if(document.querySelector('.loginClass') !== null){
                     let JSONRes = JSON.parse(this.responseText) 
                     let userName =  JSONRes.user.name
                     let token = JSONRes.token
-                    let isAdmin = JSONRes.admin
+                    let isAdmin = JSONRes.user.admin
 
                     sessionStorage.setItem('userName', userName)
                     sessionStorage.setItem('userToken', token)
                     sessionStorage.setItem('isAdmin', isAdmin)
 
                     window.location.href = "http://localhost:3000"
-
                 }
             });
 
             xhr.open("POST", "http://localhost:3000/users/login");
-            
             xhr.setRequestHeader("Content-Type", "application/json");
-
             xhr.send(data);
 
         } catch (error) {
             alert("Something went wrong. The email or password is incorrect")
         }
+        addAdminOptions()
     })
 }
 
@@ -404,7 +403,7 @@ if(document.querySelector('.singleBookClass') !== null){
 
 const setUpSingleBookPage = (jsonObj)=>{
     changeLoginToUserName()
-    addClassNotDesplayForNonAdmin()
+    addAdminOptions()
     
     let bookContainer = document.querySelector(".section2-inner")
     console.log('All books obj:', jsonObj); //<< 
@@ -488,9 +487,7 @@ const addEventclickOnCart = () => {
     
                     xhr.open("PATCH", url);
                     xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem('userToken'));
-                    console.log("before xhr.send");
                     xhr.send();
-                    console.log("after xhr.send");
                 } catch (error) {
                     console.log(error); 
                 }
@@ -553,7 +550,7 @@ if(document.querySelector('.ShoppingCartClass') !== null){
 // set cart page 
 const setCartPage = (jsonObj)=>{
     changeLoginToUserName()
-    addClassNotDesplayForNonAdmin()
+    addAdminOptions()
     console.log(jsonObj);
     
     let sum = 0
@@ -752,13 +749,13 @@ if(document.querySelector('.addNewBook') !== null){
 }
 
 // add class not display
-const addClassNotDesplayForNonAdmin = ()=>{
-    console.log('isAdmin', sessionStorage.getItem('isAdmin'));
+// const addClassNotDesplayForNonAdmin = ()=>{
+//     console.log('isAdmin', sessionStorage.getItem('isAdmin'));
     
-    if(sessionStorage.getItem('isAdmin') === 'false' || sessionStorage.getItem('isAdmin') === undefined || sessionStorage.getItem('isAdmin') === null){
-        document.querySelector('.editAddDiv').classList.add('notDisplay')
-    }
-}
+//     if(sessionStorage.getItem('isAdmin') === 'false' || sessionStorage.getItem('isAdmin') === undefined || sessionStorage.getItem('isAdmin') === null){
+//         document.querySelector('.editAddDiv').classList.add('notDisplay')
+//     }
+// }
 
 // add event listener to 'checkout button
 const addEventListenerToCheckOutButton = ()=>{
@@ -783,7 +780,25 @@ const addEventListenerToCheckOutButton = ()=>{
     })
 }
 
+// add admin option
+const addAdminOptions = () => {
+    if(sessionStorage.getItem('isAdmin') === 'true'){
+        let searchForm = document.querySelector('#search-form')
+        let editAddDiv = document.createElement('div')
+        editAddDiv.classList.add('editAddDiv')
+        searchForm.appendChild(editAddDiv)
 
+        let editByAdmin = document.createElement('a')
+        editByAdmin.href = 'http://localhost:3000/index-admin'
+        editByAdmin.innerHTML = 'Edit /'
+        editAddDiv.appendChild(editByAdmin)
+
+        let addByAdmin = document.createElement('a')
+        addByAdmin.href = 'http://localhost:3000/add-new-book'
+        addByAdmin.innerHTML = 'Add'
+        editAddDiv.appendChild(addByAdmin)
+    }
+}
 
 
  
